@@ -1,0 +1,22 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-skills-plugin-skills-block {
+	background-color: #21759b;
+	color: #fff;
+	padding: 2px;
+}
+
+.skill-item {
+	padding: 2px;
+	background-color: #eee;
+	margin:auto;
+}
+
+.skill-name {
+	text-shadow: #21759b 1px 1px 0;
+}
