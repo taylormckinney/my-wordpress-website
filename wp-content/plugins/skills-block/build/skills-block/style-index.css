@@ -1,1 +1,31 @@
-.wp-block-skills-plugin-skills-block{background-color:#21759b;color:#fff;padding:2px}.skill-item{background-color:#eee;margin:auto;padding:2px}.skill-name{text-shadow:#21759b 1px 1px 0}
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/skills-block/style.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-skills-plugin-skills-block {
+  background-color: #eee;
+  padding: 10px;
+  display: flex;
+  flex: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 5px;
+}
+.skill-item {
+  padding: 5px;
+  background-color: #d5b1cc;
+  flex: 0 0 auto;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px #8b5b8e;
+}
+.skill-name {
+  color: #000;
+  text-shadow: #8b5b8e 0 0 2px;
+}
+
+/*# sourceMappingURL=style-index.css.map*/
