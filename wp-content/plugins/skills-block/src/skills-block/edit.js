@@ -31,32 +31,32 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes }) {
-	const { skills = [] } = attributes; //fallback to empty list if skills is undefined
+	const { skillsList } = attributes; 
 
 	//add new empty skill (for Add button)
 	const addSkill = () => {
-		const skillsCopy = [...(skills || [])];
+		const skillsCopy = [...(skillsList || [])];
 		skillsCopy.push(' ');
-		setAttributes({ skills: skillsCopy });
+		setAttributes({ skillsList: skillsCopy });
 	};
 	//update an existing skill by index
 	const updateSkill = (index, newValue) => {
-		const skillsCopy = [...skills];
+		const skillsCopy = [...skillsList];
 		skillsCopy[index] = newValue;
-		setAttributes({ skills: skillsCopy });
+		setAttributes({ skillsList: skillsCopy });
 	};
 
 	//remove skill by index (for Remove button)
 	const removeSkill = (index) => {
-		const skillsCopy = skills.filter((_, i) => i !== index);
-		setAttributes({ skills: skillsCopy });
+		const skillsCopy = skillsList.filter((_, i) => i !== index);
+		setAttributes({ skillsList: skillsCopy });
 	}
 	return (
 		<>
 
 			<InspectorControls>
 				<PanelBody title={__('Skills Settings', 'skills-block')}>
-					{skills && skills.map((skill, index) => {
+					{skillsList && skillsList.map((skill, index) => {
 						return (<div key={index}>
 							<TextControl
 								label={__('Skill', 'skills-block')}
@@ -77,12 +77,11 @@ export default function Edit({ attributes, setAttributes }) {
 
 
 			<div {...useBlockProps()}>
-				{skills && skills.map((skill, index) => (
+				{skillsList && skillsList.map((skill, index) => (
 					<div class="skill-item">
-					<span key={index} class="skill-name">{skill}</span>
-				</div>
-				)
-			)}
+						<span key={index} class="skill-name">{skill}</span>
+					</div>
+				))}
 			</div>
 
 		</>

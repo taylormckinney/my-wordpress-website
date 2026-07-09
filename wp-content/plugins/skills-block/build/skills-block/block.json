@@ -9,7 +9,10 @@
   "description": "Example block scaffolded with Create Block tool.",
   "example": {},
   "supports": {
-    "html": false
+    "align": true,
+    "color": true,
+    "spacing": true,
+    "html": true
   },
   "textdomain": "skills-block",
   "editorScript": "file:./index.js",

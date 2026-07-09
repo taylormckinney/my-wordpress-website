@@ -9,18 +9,20 @@
 	background-color: #eee;
 	padding: 10px;
 	display: flex;
-	flex: row wrap;
+	flex-flow: row wrap;
 	justify-content: space-evenly;
 	align-items: center;
+	align-content: space-around;
 	border-radius: 5px;
+	max-width:100%;
 }
 
 .skill-item {
 	padding: 5px;
 	background-color: #d5b1cc;
-	flex: 0 0 auto;
 	border-radius: 5px;
 	box-shadow: 1px 1px 2px #8b5b8e;
+	margin: 5px;
 }
 
 .skill-name {

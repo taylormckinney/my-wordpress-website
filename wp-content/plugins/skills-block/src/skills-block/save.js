@@ -16,11 +16,11 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @return {Element} Element to render.
  */
 export default function save({attributes}) {
-    const {skills} = attributes; 
+    const {skillsList} = attributes; 
 	return (
 		
         			<div {...useBlockProps.save()}>
-                    {skills && skills.map((skill, index) => (
+                    {skillsList && skillsList.map((skill, index) => (
                         <div class="skill-item">
                         <span key={index} class="skill-name">{skill}</span>
                     </div>

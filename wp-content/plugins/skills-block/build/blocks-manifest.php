@@ -14,7 +14,10 @@ return array(
 			
 		),
 		'supports' => array(
-			'html' => false
+			'align' => true,
+			'color' => true,
+			'spacing' => true,
+			'html' => true
 		),
 		'textdomain' => 'skills-block',
 		'editorScript' => 'file:./index.js',
