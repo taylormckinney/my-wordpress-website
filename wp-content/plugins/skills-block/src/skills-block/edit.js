@@ -12,7 +12,7 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { Button, PanelBody, TextControl } from '@wordpress/components';
+import { Button, Dashicon, Flex, FlexItem, PanelBody, TextControl } from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -31,7 +31,7 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes }) {
-	const { skillsList } = attributes; 
+	const { skillsList } = attributes;
 
 	//add new empty skill (for Add button)
 	const addSkill = () => {
@@ -55,21 +55,31 @@ export default function Edit({ attributes, setAttributes }) {
 		<>
 
 			<InspectorControls>
-				<PanelBody title={__('Skills Settings', 'skills-block')}>
+				<PanelBody 
+				title={__('Skills Settings', 'skills-block')}
+				initialOpen={true}
+				>
 					{skillsList && skillsList.map((skill, index) => {
-						return (<div key={index}>
-							<TextControl
-								label={__('Skill', 'skills-block')}
-								value={skill}
-								onChange={(newValue) => updateSkill(index, newValue)}
-							/>
-							<Button isDestructive onClick={() => removeSkill(index)}>
-								{__('Remove Skill', 'skills-block')}
-							</Button>
-						</div>)})
+						return (<Flex key={index} style={{ marginBottom: '10px' }}>
+							<FlexItem isBlock>
+								<TextControl
+									label={__('Skill ' + (index + 1), 'skills-block')}
+									hideLabelFromVision={true}
+									value={skill}
+									onChange={(newValue) => updateSkill(index, newValue)}
+								/>
+							</FlexItem>
+							<FlexItem>
+								<Button isDestructive onClick={() => removeSkill(index)}>
+									<Dashicon icon="remove" />
+								</Button>
+							</FlexItem>
+						</Flex>)
+					})
 					}
-					<Button  onClick={addSkill}>
-						{__('Add Skill', 'skills-block')}
+					<Button onClick={addSkill}>
+						<Dashicon icon="insert" style={{marginRight: '5px'}}/>
+						{__('Add a new Skill', 'skills-block')}
 					</Button>
 
 				</PanelBody>
