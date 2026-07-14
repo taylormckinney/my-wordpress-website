@@ -8,8 +8,8 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Skills Block',
 		'category' => 'widgets',
-		'icon' => 'smiley',
-		'description' => 'Example block scaffolded with Create Block tool.',
+		'icon' => 'screenoptions',
+		'description' => 'Block used for displaying a list of skills, stylized as separate div objects.',
 		'example' => array(
 			
 		),
