@@ -22,7 +22,8 @@ export default function save({attributes}) {
 			{ faqList && faqList.map((faq, index) => (
 				<div class="faq-item" key={index}>
 					<span class="faq-question" id={'question' + index}>{faq.question}</span>
-					<span class="faq-answer" id={'answer' + index}>{faq.answer}</span>
+					<span class="faq-answer" id={'answer' + index} style="display:none">{faq.answer}</span>
+					<button id={'toggle' + index} > Toggle </button>
 				</div>
 			))}
 		</div>

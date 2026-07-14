@@ -21,5 +21,27 @@
  */
 
 /* eslint-disable no-console */
-console.log( 'Hello World! (from create-block-faq-block block)' );
+ const toggleButtons = document.querySelectorAll('.faq-item button');
+ toggleButtons.forEach((button, index) => {
+     button.addEventListener('click', () => toggleAnswer(index));
+ });
+
+ const answers = document.querySelectorAll('.faq-answer');
+ answers.forEach((answer) => {
+        answer.style.display = 'none';
+ })
+function toggleAnswer(index) {
+    const question = document.getElementById('question' + index);
+    const answer = document.getElementById('answer' + index);
+    if (answer.style.display === 'none') {
+        answer.style.display = 'inline';
+        question.style.display = 'none';
+        question.setAttribute('aria-expanded', 'true');
+    } else {
+        answer.style.display = 'none';
+        question.style.display = 'inline';
+        question.setAttribute('aria-expanded', 'false');
+    }
+    console.log('Toggled answer for FAQ ' + (index + 1));
+}
 /* eslint-enable no-console */

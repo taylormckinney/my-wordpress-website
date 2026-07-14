@@ -1,1 +1,1 @@
-.wp-block-faq-plugin-faq-block{background-color:#21759b;color:#fff;padding:2px}
+.wp-block-faq-plugin-faq-block{align-items:center;background-color:#21759b;color:#fff;display:flex;flex-flow:row wrap;justify-content:space-evenly;padding:2px}.faq-item{background-color:#d5b1cc;height:200px;margin:10px;padding:5px}.faq-question{color:#000}.faq-answer{color:#1f2f16}

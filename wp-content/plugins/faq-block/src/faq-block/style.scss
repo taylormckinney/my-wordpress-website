@@ -9,4 +9,24 @@
 	background-color: #21759b;
 	color: #fff;
 	padding: 2px;
+	display:flex;
+	flex-flow: row wrap;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.faq-item {
+	height: 200px;
+	padding: 5px;
+	flex-grow: 1;
+	margin: 10px;
+	background-color: #D5B1CC;
+}
+
+.faq-question {
+	color: #000;
+}
+
+.faq-answer {
+	color: #1F2F16;
 }
