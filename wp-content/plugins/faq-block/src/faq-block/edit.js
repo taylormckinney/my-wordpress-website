@@ -85,11 +85,11 @@ export default function Edit({ attributes, setAttributes }) {
 
 			<div {...useBlockProps()}>
 				{faqList && faqList.map((faq, index) => (
-					<div class="faq-item" key={index}>
+					<button class="faq-item" key={index} id={'toggle' + index}>
 						<span class="faq-question" id={'question' + index}>{faq.question}</span>
-						<span class="faq-answer" style="display:none;" id={'answer' + index}>{faq.answer}</span>
-						<button id={'toggle' + index}> Toggle </button>
-					</div>
+						<span class="faq-answer" style={{display:'none'}} id={'answer' + index}>{faq.answer}</span>
+						
+					</button>
 				))}
 			</div>
 		</>

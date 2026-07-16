@@ -20,11 +20,10 @@ export default function save({attributes}) {
 	return (
 		<div { ...useBlockProps.save() }>
 			{ faqList && faqList.map((faq, index) => (
-				<div class="faq-item" key={index}>
+				<button class="faq-item" key={index} id={'toggle' + index}>
 					<span class="faq-question" id={'question' + index}>{faq.question}</span>
-					<span class="faq-answer" id={'answer' + index} style="display:none">{faq.answer}</span>
-					<button id={'toggle' + index} > Toggle </button>
-				</div>
+					<span class="faq-answer" id={'answer' + index} style={{display:'none'}}>{faq.answer}</span>
+				</button>
 			))}
 		</div>
 	);
