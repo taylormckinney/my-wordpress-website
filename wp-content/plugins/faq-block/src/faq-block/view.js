@@ -44,14 +44,18 @@ function toggleAnswer(index) {
             question.classList.remove('faq-question');
             question.classList.add('faq-question-toggled');
             question.setAttribute('aria-expanded', 'true');
+            item.classList.add('selected');
             item.style.maxWidth = currentWidth;
+            item.style.minWidth = currentWidth;
             answer.style.display = 'inline';
         }
         else {
             question.classList.remove('faq-question-toggled');
             question.classList.add('faq-question');
             question.setAttribute('aria-expanded', 'false');
-            item.style.maxWidth = 'none';
+            item.classList.remove('selected');
+            item.style.maxWidth = 'auto';
+            item.style.minWidth = 'auto';
             answer.style.display = 'none';
         }
     });

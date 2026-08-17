@@ -6,8 +6,6 @@
  */
 
 .wp-block-faq-plugin-faq-block {
-	background-color: #21759b;
-	color: #fff;
 	padding: 2px;
 	display:flex;
 	flex-flow: row wrap;
@@ -17,22 +15,44 @@
 
 .faq-item {
 	height: 200px;
-	padding: 5px;
+	padding: 15px;
 	flex-grow: 1;
 	margin: 10px;
-	background-color: #D5B1CC;
+	background-color: #8B5B8E;
+	transition: background-color 0.3s ease;
+	transition: box-shadow 0.3s ease;
+	outline: none;
+	:focus, :active {
+		outline: none;
+		border: none;
+		box-shadow: 0 0 8px 5px #2E0219 inset;
+	}
+}
+
+.faq-item:hover {
+	box-shadow: 0 0 8px 5px #2E0219 inset, 0 0 5px #8B5B8E;
+}
+
+.selected {
+	background-color: #CDB4CF;
+	box-shadow: 0 0 8px 5px #2E0219 inset, 0 0 5px #8B5B8E;
 }
 
 .faq-question {
-	color: #000;
-	font-size: 20px;
+	color: #2E0219;
+	font-size: 30px;
+	font-family: 'Hearty Sacred', serif;
 }
 
 .faq-question-toggled {
-	font-size: 12px;
+	font-size: 18px;
 	font-weight: bold;
+	margin-bottom: 10px;
+	font-family: 'Hearty Sacred', serif;
+	color: #3B5249;
 }
 
 .faq-answer {
-	color: #1F2F16;
+	color: #000;
+	font-size: 16px;
 }
