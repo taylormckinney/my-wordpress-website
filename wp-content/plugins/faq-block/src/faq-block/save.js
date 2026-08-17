@@ -21,8 +21,8 @@ export default function save({attributes}) {
 		<div { ...useBlockProps.save() }>
 			{ faqList && faqList.map((faq, index) => (
 				<button class="faq-item" key={index} id={'toggle' + index}>
-					<span class="faq-question" id={'question' + index}>{faq.question}</span>
-					<span class="faq-answer" id={'answer' + index} style={{display:'none'}}>{faq.answer}</span>
+					<p class="faq-question" id={'question' + index}>{faq.question}</p>
+					<p class="faq-answer" id={'answer' + index} style={{display:'none'}}>{faq.answer}</p>
 				</button>
 			))}
 		</div>
