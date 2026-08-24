@@ -24,27 +24,32 @@
 let gameDay = new Date();
 let schedule = {};
 let selectedGame = {};
+const nhlBaseUrl = 'https://corsproxy.io/?url=https://api-web.nhle.com/v1/';
+const nhlStatsBaseUrl = 'https://corsproxy.io/?url=https://api.nhle.com/stats/rest/en/';
 
+/**
+ * Once page HTML loads, add event listener to game day form submit button to fetch schedule for selected game day
+ */
+document.addEventListener('DOMContentLoaded', () => {
 
-const gameDayForm = document.getElementById('gameDayForm'); 
+    const gameDayForm = document.getElementById('gameDayForm');
 
-gameDayForm.addEventListener('submit', (event) => {
-event.preventDefault();
-gameDay = gameDayForm.elements['gameDay'].value;
+    gameDayForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        gameDay = gameDayForm.elements['gameDay'].value;
 
-let apiURL = nhlBaseUrl + 'schedule/' + gameDay;
+        let apiURL = nhlBaseUrl + 'schedule/' + gameDay;
 
-    schedule = getSchedule(apiURL);
+        schedule = getSchedule(apiURL);
+    });
 });
 
 
 
 
-const nhlBaseUrl = 'https://corsproxy.io/?url=https://api-web.nhle.com/v1/';
-const nhlStatsBaseUrl = 'https://corsproxy.io/?url=https://api.nhle.com/stats/rest/en/';
 
 /**
- * Fetches schedule from NHL API & triggers display of schedule
+ * Fetches schedule from NHL API & triggers display of week's schedule
  */
 async function getSchedule(apiURL) {
     try {
@@ -63,7 +68,7 @@ async function getSchedule(apiURL) {
 }
 
 /**
- * Displays week schedule & highlights selected game day. Triggers display of games
+ * Displays week's schedule & highlights selected game day. Triggers display of games
  */
 function displaySchedule(gameWeek) {
     const weekDiv = document.getElementById("weekSchedule");
@@ -127,15 +132,9 @@ function displayGames(gamesList) {
         gamesDiv.appendChild(newGameDiv);
     });
 }
-
 /**
- * Displays details for a selected game & triggers display of Lights control 
- */
-function displayGameDetails(game) {
-    console.log('triggered displayGameDetails for ' + game.id);
-}
-/**
- * Toggles display of games, if a game is selected, it will remain displayed when toggling
+ * Toggles display of games; If a game is selected, it will remain displayed when toggling, otherwise all are hidden
+ * If a game is selected and user clicks 'Show all games', all games will be displayed and the selected game is unset
  */
 function toggleShowGames() {
     const toggleButton = document.getElementById("toggleGames");
@@ -146,7 +145,6 @@ function toggleShowGames() {
         [...gamesElmts].forEach((gameDiv) => {
             if (gameDiv.id != selectedGame.id) {
                 gameDiv.style.display = "none";
-                console.log('hiding game ID: ' + gameDiv.id);
             }
         });
         toggleButton.innerHTML = "Show All Games";
@@ -160,6 +158,14 @@ function toggleShowGames() {
     }
 
 }
+
+/**
+ * Displays details for a selected game & triggers display of Lights control 
+ */
+function displayGameDetails(game) {
+    console.log('triggered displayGameDetails for ' + game.id);
+}
+
 
 
 

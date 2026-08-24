@@ -29,8 +29,22 @@ import './editor.scss';
  */
 export default function Edit() {
 	return (
-		<p { ...useBlockProps() }>
-			{ __( 'Hockey Lights – hello from the editor!', 'hockey-lights' ) }
-		</p>
+		<div { ...useBlockProps() }>
+			<div id="hue">Connect to Hue account: </div>
+
+			<hr></hr>
+
+				<form id="gameDayForm" method="post">
+					<label for="gameDay">Choose a date to get started</label>
+					<input type="date" id="gameDay" name="gameDay"></input>
+					<input type="submit"></input>
+				</form>
+
+				<div id="weekSchedule"></div>
+
+				<div id="games"></div>
+
+				<div id="gameDetails"></div>
+		</div>
 	);
 }
