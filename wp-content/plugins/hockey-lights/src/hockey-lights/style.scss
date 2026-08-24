@@ -1,0 +1,41 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-hockey-hockey-lights {
+	background-color: #21759b;
+	color: #fff;
+	padding: 2px;
+}
+
+.day {
+height: 150px;
+width: 100px;
+background-color: #DECDF5;
+text-align: center;
+}
+
+.gameDay {
+background-color: #63264A;
+color: white;
+}
+
+#weekSchedule {
+display: flex;
+}
+
+.game {
+height: 100px;
+background-color: #70A9A1;
+padding: 5px;
+margin: 10px;
+}
+
+.selectedGame {
+background-color: #042A2B;
+color: white;
+}
+
