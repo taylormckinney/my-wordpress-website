@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name:       Hockey Lights
- * Description:       Custom block for integrating Philips Hue with NHL games and live scores
+ * Plugin Name:       Tickets Block
+ * Description:       Displays a list of concerts as a ticket.
  * Version:           0.1.0
  * Requires at least: 6.8
  * Requires PHP:      7.4
  * Author:            Taylor McKinney
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       hockey-lights
+ * Text Domain:       tickets-block
  *
  * @package CreateBlock
  */
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @see https://make.wordpress.org/core/2025/03/13/more-efficient-block-type-registration-in-6-8/
  * @see https://make.wordpress.org/core/2024/10/17/new-block-type-registration-apis-to-improve-performance-in-wordpress-6-7/
  */
-function create_block_hockey_lights_block_init() {
+function create_block_tickets_block_block_init() {
 	wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
 }
-add_action( 'init', 'create_block_hockey_lights_block_init' );
+add_action( 'init', 'create_block_tickets_block_block_init' );
