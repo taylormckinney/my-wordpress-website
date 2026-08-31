@@ -19,10 +19,28 @@ export default function save({ attributes }) {
 	const { concertsList } = attributes;
 
 	return (
-		<>
-			<p {...useBlockProps.save()}>
-				{'Tickets Block – hello from the saved content!'}
-			</p>
-		</>
+		
+			<div {...useBlockProps.save()}>
+				Add new concert: 
+				<form id="concertForm" method="post">
+					<label for="artist">Artist:</label>
+					<input type="text" id="artist" name="artist" required></input>
+					<label for="date">Date:</label>
+					<input type="date" id="date" name="date"></input>
+					<label for="venue.city">Venue Location:</label>
+					<input type="text" id="venue.city" name="venue.city"></input>
+					<input type="submit"></input>
+				</form>
+
+				<div id="searchResults"></div>
+
+				{concertsList && concertsList.map((concert, index) => (
+					<div key={index}>
+						<h3>{concert.artist}</h3>
+						<p>{concert.date}</p>
+					</div>
+				))}
+			</div>
+		
 	);
 }

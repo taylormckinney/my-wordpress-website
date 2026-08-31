@@ -54,6 +54,23 @@ return array(
 									'default' => ''
 								)
 							)
+						),
+						'seatDetails' => array(
+							'type' => 'object',
+							'properties' => array(
+								'section' => array(
+									'type' => 'string',
+									'default' => ''
+								),
+								'row' => array(
+									'type' => 'string',
+									'default' => ''
+								),
+								'seatNumber' => array(
+									'type' => 'string',
+									'default' => ''
+								)
+							)
 						)
 					)
 				)

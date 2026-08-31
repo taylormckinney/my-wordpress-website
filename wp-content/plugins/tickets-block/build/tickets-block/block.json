@@ -47,6 +47,23 @@
                 "default": ""
               }
             }
+          },
+          "seatDetails": {
+            "type": "object",
+            "properties": {
+              "section": {
+                "type": "string",
+                "default": ""
+              },
+              "row": {
+                "type": "string",
+                "default": ""
+              },
+              "seatNumber": {
+                "type": "string",
+                "default": ""
+              }
+            }
           }
         }
       }
