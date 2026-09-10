@@ -29,7 +29,7 @@ export default function save({ attributes }) {
 					<input type="date" id="date" name="date"></input>
 					<label for="venue.city">Venue Location:</label>
 					<input type="text" id="venue.city" name="venue.city"></input>
-					<input type="submit"></input>
+					<input type="submit" id="searchSubmitButton"></input>
 				</form>
 
 				<div id="searchResults"></div>
