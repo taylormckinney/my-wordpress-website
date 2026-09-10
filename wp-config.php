@@ -82,7 +82,7 @@ define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-
+define('SETLISTFM_API_KEY', 'TLV0akA8ubfR2sjIX4qhtj7uIUDp40fBNSQC');
 
 /* That's all, stop editing! Happy publishing. */
 

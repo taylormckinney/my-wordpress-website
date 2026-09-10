@@ -37,27 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
         let dateString = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
 
         let searchURL = setlistFmBaseUrl + 'artistName=' + artist + '&date=' + dateString + '&cityName=' + city;
-        console.log(searchURL);
+        console.log(searchURL); 
+//search url is printed but API call not made
+
+
+
         searchForSetlist(searchURL);
     });
 
 });
 
 function searchForSetlist(searchURL) {
-    fetch(searchURL, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'x-api-key': SETLISTFM_API_KEY
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
-        console.error('Error fetching setlist:', error);
-    });
+    
 }
 
 function displaySearchResults(data) {
