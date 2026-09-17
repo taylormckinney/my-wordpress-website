@@ -15,31 +15,27 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {Element} Element to render.
  */
-export default function save({ attributes }) {
-	const { concertsList } = attributes;
+export default function save() {
 
 	return (
 		
 			<div {...useBlockProps.save()}>
 				Add new concert: 
-				<form id="concertForm" method="post">
+				<form id="concert-form" name="concert-form" method="post" action="tickets_process_submission">
 					<label for="artist">Artist:</label>
 					<input type="text" id="artist" name="artist" required></input>
+
 					<label for="date">Date:</label>
 					<input type="date" id="date" name="date"></input>
-					<label for="venue.city">Venue Location:</label>
-					<input type="text" id="venue.city" name="venue.city"></input>
-					<input type="submit"></input>
+
+					<label for="venue_city">Venue Location:</label>
+					<input type="text" id="venue_city" name="venue_city"></input>
+
+					<input type="submit" id="concert-submit" name="concert-submit" value="Search for Setlists"></input>
+
 				</form>
 
 				<div id="searchResults"></div>
-
-				{concertsList && concertsList.map((concert, index) => (
-					<div key={index}>
-						<h3>{concert.artist}</h3>
-						<p>{concert.date}</p>
-					</div>
-				))}
 			</div>
 		
 	);

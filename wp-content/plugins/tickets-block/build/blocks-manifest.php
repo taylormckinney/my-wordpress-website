@@ -9,7 +9,7 @@ return array(
 		'title' => 'Tickets Block',
 		'category' => 'widgets',
 		'icon' => 'smiley',
-		'description' => 'Displays a list of concerts as a ticket.',
+		'description' => 'Used to create new \'Tickets\' using data from Setlist.fm API.',
 		'example' => array(
 			
 		),
@@ -19,62 +19,6 @@ return array(
 		'textdomain' => 'tickets-block',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./index.css',
-		'style' => 'file:./style-index.css',
-		'viewScript' => 'file:./view.js',
-		'attributes' => array(
-			'concertsList' => array(
-				'type' => 'array',
-				'default' => array(
-					
-				),
-				'items' => array(
-					'type' => 'object',
-					'properties' => array(
-						'date' => array(
-							'type' => 'string',
-							'default' => ''
-						),
-						'artist' => array(
-							'type' => 'string',
-							'default' => ''
-						),
-						'venue' => array(
-							'type' => 'object',
-							'properties' => array(
-								'name' => array(
-									'type' => 'string',
-									'default' => ''
-								),
-								'city' => array(
-									'type' => 'string',
-									'default' => ''
-								),
-								'state' => array(
-									'type' => 'string',
-									'default' => ''
-								)
-							)
-						),
-						'seatDetails' => array(
-							'type' => 'object',
-							'properties' => array(
-								'section' => array(
-									'type' => 'string',
-									'default' => ''
-								),
-								'row' => array(
-									'type' => 'string',
-									'default' => ''
-								),
-								'seatNumber' => array(
-									'type' => 'string',
-									'default' => ''
-								)
-							)
-						)
-					)
-				)
-			)
-		)
+		'style' => 'file:./style-index.css'
 	)
 );
