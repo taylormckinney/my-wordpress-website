@@ -18,9 +18,10 @@ import { useBlockProps } from '@wordpress/block-editor';
 export default function save() {
 
 	return (
-		
-			<div {...useBlockProps.save()}>
-				Add new concert: 
+		<>
+		<a href="#" onclick="openModal()">Add new concert:</a>
+			<div {...useBlockProps.save()} id="newConcertModal" className="modal">
+				<span class="closeButton" onclick="closeModal()">&times;</span>
 				<form id="concert-form" name="concert-form" method="post" action="tickets_process_submission">
 					<label for="artist">Artist:</label>
 					<input type="text" id="artist" name="artist" required></input>
@@ -37,6 +38,7 @@ export default function save() {
 
 				<div id="searchResults"></div>
 			</div>
+			</>
 		
 	);
 }

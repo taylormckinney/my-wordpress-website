@@ -29,12 +29,13 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit() {
-	
+
 	return (
-	
-			
-			<div {...useBlockProps()}>
-				Add new concert: 
+
+		<>
+			<a href="#" onclick="openModal()">Add new concert:</a>
+			<div {...useBlockProps()} id="newConcertModal" className="modal">
+				<span class="closeButton" onclick="closeModal()">&times;</span>
 				<form id="concert-form" method="post" name="concert-form" action="tickets_process_submission">
 					<label for="artist">Artist:</label>
 					<input type="text" id="artist" name="artist" required></input>
@@ -46,11 +47,12 @@ export default function Edit() {
 					<input type="text" id="venue_city" name="venue_city"></input>
 
 					<input type="submit" id="concert-submit" name="concert-submit" value="Search for Setlists"></input>
-					
+
 				</form>
 
 				<div id="searchResults"></div>
 			</div>
-		
+		</>
+
 	);
 }

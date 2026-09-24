@@ -5,8 +5,17 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-create-block-tickets-block {
+.wp-block-concerts-tickets-block {
 	background-color: #21759b;
 	color: #fff;
 	padding: 2px;
+}
+
+.modal {
+	display:none;
+}
+
+.closeButton {
+  font-size: 24px;
+  color: red;
 }
