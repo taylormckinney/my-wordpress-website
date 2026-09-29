@@ -39,15 +39,15 @@ function register_tickets_post_type() {
         'menu_icon' => 'dashicons-tickets-alt',
     );
 
-    register_post_type('tickets', $args);
+    register_post_type('ticket', $args);
 }
 
 /**
- * Adds custom meta keys for the 'tickets' post type.
+ * Adds custom meta keys for the 'ticket' post type.
  */
 add_filter('postmeta_form_keys', 'add_tickets_post_type_meta_keys', 10, 2);
 function add_tickets_post_type_meta_keys($keys, $post) {
-    if ( $post->post_type === 'tickets' ) {
+    if ( $post->post_type === 'ticket' ) {
         $keys[] = 'date';
         $keys[] = 'state';
         $keys[] = 'city';
@@ -60,7 +60,7 @@ function add_tickets_post_type_meta_keys($keys, $post) {
 }
 
 /**
- * Registers custom taxonomies for the 'tickets' post type. ('artist', 'venue', 'festival')
+ * Registers custom taxonomies for the 'ticket' post type. ('artist', 'venue', 'festival')
  */
 add_action('init', 'register_tickets_taxonomies');
 function register_tickets_taxonomies() {
@@ -73,7 +73,7 @@ function register_tickets_taxonomies() {
         'hierarchical' => false,
         'show_in_rest' => true,
     );
-    register_taxonomy('artist', 'tickets', $artistArgs);
+    register_taxonomy('artist', 'ticket', $artistArgs);
 
     $venueArgs = array(
         'labels' => array(
@@ -84,7 +84,7 @@ function register_tickets_taxonomies() {
         'hierarchical' => false,
         'show_in_rest' => true,
     );
-    register_taxonomy('venue', 'tickets', $venueArgs);
+    register_taxonomy('venue', 'ticket', $venueArgs);
 
     $festivalArgs = array(
         'labels' => array(
@@ -95,7 +95,27 @@ function register_tickets_taxonomies() {
         'hierarchical' => false,
         'show_in_rest' => true,
     );
-    register_taxonomy('festival', 'tickets', $festivalArgs);
+    register_taxonomy('festival', 'ticket', $festivalArgs);
 }
 
+/**
+ * Loads templates for 'ticket' post type. 
+ */
+/* add_filter('template_include', 'add_tickets_post_type_templates');
+function add_tickets_post_type_templates ($template) {
+    if (is_singular('ticket')) {
+        $plugin_template = plugin_dir_path(__FILE__) . 'single-ticket.php';
+        if(file_exists($plugin_template)) {
+            return $plugin_template;
+        }
+    }
 
+    if(is_post_type_archive('ticket')) {
+        $plugin_template = plugin_dir_path(__FILE__) . 'archive-ticket.php';
+        if(file_exists($plugin_template)) {
+            return $plugin_template;
+        }
+    }
+
+    return $template;
+} */

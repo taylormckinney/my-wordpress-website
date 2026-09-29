@@ -162,7 +162,6 @@ function create_new_ticket() {
 
 add_action('wp_enqueue_scripts', 'ajax_tickets_enqueue_scripts');
 function ajax_tickets_enqueue_scripts() {
-	//Enqueue & localize scripts for ticket form submission handling
     wp_enqueue_script('tickets-block-form', plugin_dir_url(__FILE__) . 'tickets-form-submission.js', array('jquery'), null, true);
     wp_localize_script('tickets-block-form', 'tickets_ajax_data', array(
         'ajax_url' => admin_url('admin-ajax.php'),
@@ -170,7 +169,6 @@ function ajax_tickets_enqueue_scripts() {
 		'create_ticket_nonce' => wp_create_nonce('create_new_ticket')
     ));
 
-	//enqueue & localize scripts for ticket creation handling
 }
 
 ?>

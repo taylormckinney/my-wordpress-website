@@ -4,5 +4,11 @@
     "settings": {},
     "styles": {},
     "templateParts": [],
-    "customTemplates": []
+    "customTemplates": [
+        {
+            "name": "single-ticket",
+            "title": "Single Ticket",
+            "postTypes": ["ticket"]
+        }
+    ]
 }
