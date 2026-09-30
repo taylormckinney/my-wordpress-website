@@ -11,11 +11,45 @@
 	padding: 2px;
 }
 
-.modal {
-	display:none;
+/**
+* Below styling originated from W3Schools: https://www.w3schools.com/JS/js_project_modal_popup.asp
+*/
+
+/* The overlay (background) */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.closeButton {
+/* Show the modal */
+.modal-overlay.show {
+  display: block;
+}
+
+/* The modal box */
+.modal-box {
+  background: white;
+  color: black;
+  width: 90%;
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* Close button */
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 8px;
   font-size: 24px;
-  color: red;
+  border: none;
+  background: none;
+  cursor: pointer;
 }

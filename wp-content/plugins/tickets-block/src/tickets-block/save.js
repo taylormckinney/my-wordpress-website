@@ -18,10 +18,9 @@ import { useBlockProps } from '@wordpress/block-editor';
 export default function save() {
 
 	return (
-		<>
-		<a href="#" onclick="openModal()">Add new concert:</a>
-			<div {...useBlockProps.save()} id="newConcertModal" className="modal">
-				<span class="closeButton" onclick="closeModal()">&times;</span>
+		
+			<div {...useBlockProps.save()}>
+				<h2>Add new Concert:</h2>
 				<form id="concert-form" name="concert-form" method="post" action="tickets_process_submission">
 					<label for="artist">Artist:</label>
 					<input type="text" id="artist" name="artist" required></input>
@@ -37,8 +36,32 @@ export default function save() {
 				</form>
 
 				<div id="searchResults"></div>
+
+				<div id="modal" class="modal-overlay">
+					<div class="modal-box">
+						<button id="closeBtn" class="modal-close">X</button>
+						<h2>Create or Update Ticket: </h2>
+						<p id="selected-concert-details"></p>
+						<form id="ticket-form" name="ticket-form" method="post">
+							<label for="generalAdmission">General Admission Show</label>
+							<input type="checkbox" id="generalAdmission" name="generalAdmission"></input>
+							<p></p>
+							<label for="section">Section: </label>
+							<input type="text" id="section" name="section"></input>
+							<br/>
+							<label for="row">Row: </label>
+							<input type="text" id="row" name="row"></input>
+							<br/>
+							<label for="seat">Seat Number:</label>
+							<input type="number" id="seat" name="seat" min="0" step="1"></input>
+							<br/>
+							<input type="submit" id="ticket-submit" name="ticket-submit" value="Create or Update Ticket"></input>
+						</form>
+					</div>
+				</div>
+
 			</div>
-			</>
+			
 		
 	);
 }

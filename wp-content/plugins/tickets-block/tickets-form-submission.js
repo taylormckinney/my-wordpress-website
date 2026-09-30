@@ -1,11 +1,12 @@
-
+//Form submission handling: 
 jQuery(document).ready(function ($) {
-    var concertForm = $('#concert-form');
+    const concertForm = $('#concert-form');
+    const ticketForm = $('#ticket-form');
+
 
     concertForm.submit(function (event) {
         event.preventDefault();
-        $('#searchResults').innerHTML = ""; //clear any previous search results
-
+        $('#searchResults').text(''); //clear any previous search results
         var formData = new FormData(concertForm[0]);
         //Date comes from form in YYYY-MM-DD format
         let date = (formData.get('date')).split('-');
@@ -35,10 +36,9 @@ jQuery(document).ready(function ($) {
                             selectShow(show);
                         });
                     });
-                    console.log(shows);
                     concertForm[0].reset(); //clear form on success
                 } else {
-                    $('#searchResults').text('Error occurred while processing your request. </br> ' + response);
+                    $('#searchResults').text('Error occurred while processing your request: ' + response.data);
                 }
             },
             error: function () {
@@ -51,39 +51,64 @@ jQuery(document).ready(function ($) {
 
 });
 
-function selectShow(show) {
-    const confirmed = confirm('You are selecting the show by ' + show.artist.name + ' on ' + show.eventDate + ' at ' + show.venue.name + '. Click OK to confirm or Cancel to go back.');
-    if (!confirmed) {
-        return;
-    }
-    //user clicked ok, create ticket
-    console.log('confirmed selection of show: ', show);
-    const showData = {
-        action: 'create_new_ticket',
-        nonce: tickets_ajax_data.create_ticket_nonce,
-        show: JSON.stringify(show) //send the show object as a JSON string
-    }
-    jQuery.ajax({
-        url: tickets_ajax_data.ajax_url,
-        method: 'POST',
-        data: showData,
-        dataType: 'json',
-        success: function (response) {
-            console.log('Ticket created successfully:', response);
-        },
-        error: function (response) {
-            console.error('Error creating ticket:', response.data);
-        }
-    });
-}
-
-
-
-
-function openModal() {
-    document.getElementById('newConcertModal').style.display = 'block';
-}
+//variables for popup modal after user selects a specific show to add seat details 
+const modal = document.getElementById('modal');
+const closeBtn = document.getElementById('closeBtn');
 
 function closeModal() {
-    document.getElementById('newConcertModal').style.display = 'none';
+    modal.classList.remove("show");
 }
+
+closeBtn.addEventListener("click", closeModal);
+
+//Close modal when clicking outside the box: 
+modal.addEventListener("click", function (event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+//Close modal if user pushes Esc key
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});
+
+//After form is submitted & API is searched, user selects a show from results: 
+function selectShow(show) {
+    modal.classList.add("show"); //opens confirmation popup
+
+    //TODO: add seat data from popup !!!! to <p>:
+    const details = document.getElementById("selected-concert-details");
+
+    //TODO: prevent default submit on tickets form
+    //TODO: validation on gen adm vs seats
+    //TODO: add seat details to data & send with showData
+    //TODO: add option to also search for opening acts
+
+    if (false) { //placeholder while I work on modal popup as confirmation 
+        const showData = {
+            action: 'create_new_ticket',
+            nonce: tickets_ajax_data.create_ticket_nonce,
+            show: JSON.stringify(show) //send the show object as a JSON string
+        };
+
+        jQuery.ajax({
+            url: tickets_ajax_data.ajax_url,
+            method: 'POST',
+            data: showData,
+            dataType: 'json',
+            success: function (response) {
+                console.log('Ticket created successfully:', response);
+                //TODO: add a toast popup to confirm to user
+            },
+            error: function (response) {
+                console.error('Error creating ticket:', response.data);
+            }
+        });
+    }
+}
+
+
+
+
