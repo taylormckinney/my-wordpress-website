@@ -81,7 +81,7 @@ function create_new_ticket() {
 	if ( ! is_array($show_data) ) {
     	wp_send_json_error('Invalid show payload.');
 	}
-	error_log("show data: " . print_r($show_data, true));
+	//error_log("show data: " . print_r($show_data, true));
 	// Normalize the sets structure. Setlist.fm returns sets => ['set' => [ ... ]]
 	$setlist = array();
 	if ( isset($show_data['sets']) ) {
@@ -126,7 +126,7 @@ function create_new_ticket() {
 	
 	$ticket_data = array(
 		'post_title'    => $title= sanitize_text_field($show_data['artist']['name'] . ' - ' . $show_data['eventDate']),
-		'post_excerpt'  => sanitize_textarea_field($show_data['venue']['name'] . ', ' . $show_data['venue']['city']['name']),
+		'post_excerpt'  => $show_data['venue']['name'] . ', ' . $show_data['venue']['city']['name'],
 		'post_content'  => $content,
 		'post_status'   => 'publish',
 		'post_type'     => 'ticket',
@@ -140,9 +140,9 @@ function create_new_ticket() {
 			'state'        => sanitize_text_field($show_data['venue']['city']['state']),
 			'city'         => sanitize_text_field($show_data['venue']['city']['name']),
 			'tour_name'    => sanitize_text_field($show_data['tour']['name'] ?? ''),
-			'seat_section' => '',
-			'seat_row'     => '',
-			'seat_number'  => '',
+			'seat_section' => sanitize_text_field($show_data['seat']['section']),
+			'seat_row'     => sanitize_text_field($show_data['seat']['row'] ?? ''),
+			'seat_number'  => sanitize_text_field($show_data['seat']['number'] ?? ''),
 		),
 	);
 	$post_id = post_exists($title);
@@ -162,8 +162,16 @@ function create_new_ticket() {
 
 add_action('wp_enqueue_scripts', 'ajax_tickets_enqueue_scripts');
 function ajax_tickets_enqueue_scripts() {
-    wp_enqueue_script('tickets-block-form', plugin_dir_url(__FILE__) . 'tickets-form-submission.js', array('jquery'), null, true);
-    wp_localize_script('tickets-block-form', 'tickets_ajax_data', array(
+    wp_enqueue_script(
+		'tickets-block-form', 
+		plugin_dir_url(__FILE__) . 'tickets-form-submission.js', 
+		array('jquery'), 
+		null, 
+		true);
+    wp_localize_script(
+		'tickets-block-form', 
+	'tickets_ajax_data', 
+	array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'form_nonce' => wp_create_nonce('tickets_process_submission'),
 		'create_ticket_nonce' => wp_create_nonce('create_new_ticket')
@@ -171,4 +179,3 @@ function ajax_tickets_enqueue_scripts() {
 
 }
 
-?>

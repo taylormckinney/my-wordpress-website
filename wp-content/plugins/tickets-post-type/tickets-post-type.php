@@ -43,6 +43,93 @@ function register_tickets_post_type() {
 }
 
 /**
+ * Register custom post meta for 'ticket' type
+ */
+add_action('init', 'register_tickets_meta');
+function register_tickets_meta() {
+   register_meta(
+    'post',
+    'date',
+    array(
+        'type' => 'string',
+        'default' => '',
+        'single' => true,
+        'show_in_rest' => true,
+        'object_subtype' => 'ticket'
+    ));
+
+    register_meta(
+    'post',
+    'state',
+    array(
+        'type' => 'string',
+        'default' => '',
+        'single' => true,
+        'show_in_rest' => true,
+        'object_subtype' => 'ticket'
+    ));
+
+    register_meta(
+    'post',
+    'city',
+    array(
+        'type' => 'string',
+        'default' => '',
+        'single' => true,
+        'show_in_rest' => true,
+        'object_subtype' => 'ticket'
+    ));
+
+    register_meta(
+    'post',
+    'tour-name',
+    array(
+        'label' => 'Tour Name',
+        'type' => 'string',
+        'default' => '',
+        'single' => true,
+        'show_in_rest' => true,
+        'object_subtype' => 'ticket'
+    ));
+
+    register_meta(
+    'post',
+    'seat_section',
+    array(
+        'label' => 'Seat Section',
+        'type' => 'string',
+        'default' => '',
+        'single' => true,
+        'show_in_rest' => true,
+        'object_subtype' => 'ticket'
+    ));
+
+    register_meta(
+    'post',
+    'seat_row',
+    array(
+        'label' => 'Seat Row',
+        'type' => 'string',
+        'default' => '',
+        'single' => true,
+        'show_in_rest' => true,
+        'object_subtype' => 'ticket'
+    ));
+
+    register_meta(
+    'post',
+    'seat_number',
+    array(
+        'label' => 'Seat Number',
+        'type' => 'string',
+        'default' => '',
+        'single' => true,
+        'show_in_rest' => true,
+        'object_subtype' => 'ticket'
+    ));
+}
+
+/**
  * Adds custom meta keys for the 'ticket' post type.
  */
 add_filter('postmeta_form_keys', 'add_tickets_post_type_meta_keys', 10, 2);
@@ -98,24 +185,3 @@ function register_tickets_taxonomies() {
     register_taxonomy('festival', 'ticket', $festivalArgs);
 }
 
-/**
- * Loads templates for 'ticket' post type. 
- */
-/* add_filter('template_include', 'add_tickets_post_type_templates');
-function add_tickets_post_type_templates ($template) {
-    if (is_singular('ticket')) {
-        $plugin_template = plugin_dir_path(__FILE__) . 'single-ticket.php';
-        if(file_exists($plugin_template)) {
-            return $plugin_template;
-        }
-    }
-
-    if(is_post_type_archive('ticket')) {
-        $plugin_template = plugin_dir_path(__FILE__) . 'archive-ticket.php';
-        if(file_exists($plugin_template)) {
-            return $plugin_template;
-        }
-    }
-
-    return $template;
-} */

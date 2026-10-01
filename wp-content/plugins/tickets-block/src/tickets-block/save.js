@@ -18,50 +18,51 @@ import { useBlockProps } from '@wordpress/block-editor';
 export default function save() {
 
 	return (
-		
-			<div {...useBlockProps.save()}>
-				<h2>Add new Concert:</h2>
-				<form id="concert-form" name="concert-form" method="post" action="tickets_process_submission">
-					<label for="artist">Artist:</label>
-					<input type="text" id="artist" name="artist" required></input>
 
-					<label for="date">Date:</label>
-					<input type="date" id="date" name="date"></input>
+		<div {...useBlockProps.save()}>
+			<h2>Add new Concert:</h2>
+			<form id="concert-form" name="concert-form" method="post" action="tickets_process_submission">
+				<label for="artist">Artist:</label>
+				<input type="text" id="artist" name="artist" required></input>
 
-					<label for="venue_city">Venue Location:</label>
-					<input type="text" id="venue_city" name="venue_city"></input>
+				<label for="date">Date:</label>
+				<input type="date" id="date" name="date"></input>
 
-					<input type="submit" id="concert-submit" name="concert-submit" value="Search for Setlists"></input>
+				<label for="venue_city">Venue Location:</label>
+				<input type="text" id="venue_city" name="venue_city"></input>
 
-				</form>
+				<input type="submit" id="concert-submit" name="concert-submit" value="Search for Setlists"></input>
 
-				<div id="searchResults"></div>
+			</form>
 
-				<div id="modal" class="modal-overlay">
-					<div class="modal-box">
-						<button id="closeBtn" class="modal-close">X</button>
-						<h2>Create or Update Ticket: </h2>
-						<p id="selected-concert-details"></p>
-						<form id="ticket-form" name="ticket-form" method="post">
-							<label for="generalAdmission">General Admission Show</label>
-							<input type="checkbox" id="generalAdmission" name="generalAdmission"></input>
-							<p></p>
+			<div id="searchResults"></div>
+
+			<div id="modal" class="modal-overlay">
+				<div class="modal-box">
+					<button id="closeBtn" class="modal-close">X</button>
+					<h2>Create or Update Ticket: </h2>
+					<p id="selectedConcertDetails"></p>
+					<form id="ticket-form" name="ticket-form" method="post">
+						<label for="generalAdmission">General Admission Show</label>
+						<input type="checkbox" id="generalAdmission" name="generalAdmission"></input>
+						<fieldset id="seatDetails">
+							<legend>Seat Details</legend>
 							<label for="section">Section: </label>
 							<input type="text" id="section" name="section"></input>
-							<br/>
+							<br />
 							<label for="row">Row: </label>
 							<input type="text" id="row" name="row"></input>
-							<br/>
-							<label for="seat">Seat Number:</label>
-							<input type="number" id="seat" name="seat" min="0" step="1"></input>
-							<br/>
-							<input type="submit" id="ticket-submit" name="ticket-submit" value="Create or Update Ticket"></input>
-						</form>
-					</div>
+							<br />
+							<label for="seatNumber">Seat Number:</label>
+							<input type="number" id="seatNumber" name="seatNumber" min="0" step="1"></input>
+						</fieldset>
+						<input type="submit" id="ticket-submit" name="ticket-submit" value="Create or Update Ticket"></input>
+					</form>
 				</div>
-
 			</div>
-			
-		
+
+		</div>
+
+
 	);
 }

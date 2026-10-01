@@ -1,29 +1,29 @@
-//Form submission handling: 
-jQuery(document).ready(function ($) {
-    const concertForm = $('#concert-form');
-    const ticketForm = $('#ticket-form');
+/**
+ * Once document is loaded, add event listeners on the 'Submit' buttons for both concert-form and tickets-form
+ */
 
-
-    concertForm.submit(function (event) {
+    const concertForm = document.getElementById('concert-form');
+    concertForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        $('#searchResults').text(''); //clear any previous search results
-        var formData = new FormData(concertForm[0]);
+        const searchResultsDiv = document.getElementById('searchResults');
+        searchResultsDiv.textContent = ''; //clear any previous search results
+        var concertFormData = new FormData(concertForm);
+
         //Date comes from form in YYYY-MM-DD format
-        let date = (formData.get('date')).split('-');
+        let date = (concertFormData.get('date')).split('-');
         //Date format required by setlist.fm API is DD-MM-YYYY 
         let dateString = date[2] + '-' + date[1] + '-' + date[0];
-        //update form data to have the correct date format for setlist.fm API
-        formData.set('date', dateString);
+        concertFormData.set('date', dateString);
 
         //appended to facilitate the AJAX call
-        formData.append('action', 'tickets_process_submission');
-        formData.append('nonce', tickets_ajax_data.form_nonce);
+        concertFormData.append('action', 'tickets_process_submission');
+        concertFormData.append('nonce', tickets_ajax_data.form_nonce);
 
 
-        $.ajax({
+        jQuery.ajax({
             url: tickets_ajax_data.ajax_url,
             type: 'POST',
-            data: formData,
+            data: concertFormData,
             processData: false,
             contentType: false,
             dataType: 'json',
@@ -31,25 +31,25 @@ jQuery(document).ready(function ($) {
                 if (response.success) {
                     const shows = response.data.setlist;
                     shows.forEach(function (show) {
-                        $('#searchResults').append('<div class="show-result"><h3>' + show.artist.name + ' on ' + show.eventDate + '</h3><p>Venue: ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '</p><a href="' + show.url + '" target="_blank">View Setlist on Setlist.fm</a><button class="btn btn-primary" id="select-show-' + show.id + '">Select this show</button></div>');
+                        searchResultsDiv.innerHTML += '<div class="show-result"><h3>' + show.artist.name + ' on ' + show.eventDate + '</h3><p>Venue: ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '</p><a href="' + show.url + '" target="_blank">View Setlist on Setlist.fm</a><button class="btn btn-primary" id="select-show-' + show.id + '">Select this show</button></div>';
                         document.getElementById('select-show-' + show.id).addEventListener('click', function () {
                             selectShow(show);
                         });
                     });
-                    concertForm[0].reset(); //clear form on success
                 } else {
-                    $('#searchResults').text('Error occurred while processing your request: ' + response.data);
+                    searchResultsDiv.textContent = 'Error occurred while processing your request: ' + response.data;
                 }
             },
             error: function () {
-                $('#searchResults').text('Network error occurred while processing your request. Try again');
+                searchResultsDiv.textContent = 'Network error occurred while processing your request. Try again';
             }
         });
 
 
     });
 
-});
+
+
 
 //variables for popup modal after user selects a specific show to add seat details 
 const modal = document.getElementById('modal');
@@ -78,15 +78,28 @@ document.addEventListener("keydown", function (event) {
 function selectShow(show) {
     modal.classList.add("show"); //opens confirmation popup
 
-    //TODO: add seat data from popup !!!! to <p>:
-    const details = document.getElementById("selected-concert-details");
 
-    //TODO: prevent default submit on tickets form
-    //TODO: validation on gen adm vs seats
-    //TODO: add seat details to data & send with showData
-    //TODO: add option to also search for opening acts
+    const seatData = {};
+    const ticketForm = document.getElementById('ticket-form');
+    
+    ticketForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var ticketFormData = new FormData(ticketForm);
+        if (ticketFormData.get('generalAdmission')) {
+            seatData.section = 'General Admission';
+            seatData.row = '';
+            seatData.number = '';
+        }
+        else {
+            seatData.section = ticketFormData.get("section");
+            seatData.row = ticketFormData.get("row");
+            seatData.number = ticketFormData.get("seatNumber");
+        }
+        //add seat details to show data
+        show.seat = seatData;
 
-    if (false) { //placeholder while I work on modal popup as confirmation 
+
+        //submit all show data to create a new Ticket CPT (or udpate existing)
         const showData = {
             action: 'create_new_ticket',
             nonce: tickets_ajax_data.create_ticket_nonce,
@@ -101,12 +114,39 @@ function selectShow(show) {
             success: function (response) {
                 console.log('Ticket created successfully:', response);
                 //TODO: add a toast popup to confirm to user
+                window.location.reload(); //reload concerts page after creation of ticket
+                
             },
             error: function (response) {
                 console.error('Error creating ticket:', response.data);
             }
         });
-    }
+
+    });
+
+
+    const details = document.getElementById("selectedConcertDetails");
+    details.textContent = 'You are creating a ticket for the ' + show.artist.name + ' concert on ' + show.date + ' at ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '.';
+
+     const genAdmCheckbox = document.getElementById("generalAdmission");
+    genAdmCheckbox.addEventListener('change', function () {
+        const seatDetailsSet = document.getElementById("seatDetails");
+        if (this.checked) {
+            //general admission checked, seat details not needed 
+            seatDetailsSet.style.display = 'none';
+
+        }
+        else {
+            //genAdm not checked, display form fieldset for seat details
+            seatDetailsSet.style.display = 'block';
+        }
+    });
+ 
+
+    //TODO: add option to also search for opening acts
+
+
+
 }
 
 
