@@ -31,7 +31,7 @@ import './editor.scss';
 export default function Edit() {
 
 	return (
-		<div {...useBlockProps()} id="newConcertModal" className="modal">
+		<div {...useBlockProps()}>
 			<h2>Add new Concert:</h2>
 			<form id="concert-form" name="concert-form" method="post" action="tickets_process_submission">
 				<label for="artist">Artist:</label>

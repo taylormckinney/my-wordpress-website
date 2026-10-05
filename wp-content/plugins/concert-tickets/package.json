@@ -1,0 +1,30 @@
+{
+	"name": "concert-tickets",
+	"version": "0.1.0",
+	"description": "Multiple custom blocks for managing CPT 'Tickets' for concerts.",
+	"author": "The WordPress Contributors",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start --source-path=src --output-path=build --blocks-manifest",
+		"build": "wp-scripts build --source-path=src --output-path=build --blocks-manifest",
+		"build:manifest": "wp-scripts build-blocks-manifest --input=src --output=build/blocks-manifest.php",
+		"start:setlist": "npm run build:manifest && wp-scripts start --source-path=src/setlist-block --output-path=build/setlist-block",
+		"build:setlist": "wp-scripts build --source-path=src/setlist-block --output-path=build/setlist-block && npm run build:manifest",
+		"start:tickets": "npm run build:manifest && wp-scripts start --source-path=src/tickets-block --output-path=build/tickets-block",
+		"build:tickets": "wp-scripts build --source-path=src/tickets-block --output-path=build/tickets-block && npm run build:manifest"
+	},
+	"dependencies": {
+		"@wordpress/block-editor": "latest",
+		"@wordpress/blocks": "latest",
+		"@wordpress/i18n": "latest"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^34.1.0"
+	}
+}
