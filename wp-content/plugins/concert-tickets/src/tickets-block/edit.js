@@ -1,9 +1,4 @@
 /**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
- */
-import { __ } from '@wordpress/i18n';
 /**
  * React hook that is used to mark the block wrapper element.
  * It provides all the necessary props like the class name.
@@ -18,6 +13,9 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
+import { Disabled } from '@wordpress/components';
+import { ServerSideRender } from '@wordpress/server-side-render';
+import metadata from './block.json';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -27,10 +25,15 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit() {
+export default function Edit({ attributes }) {
 	return (
-		<p { ...useBlockProps() }>
-			{ __( 'Concert Tickets Tickets Block – hello from the editor!', 'concert-tickets&#x2F;tickets-block' ) }
-		</p>
+		<div {...useBlockProps()}>
+			<Disabled>
+				<ServerSideRender
+					block={metadata.name}
+					attributes={attributes}
+				/>
+			</Disabled>
+		</div>
 	);
 }

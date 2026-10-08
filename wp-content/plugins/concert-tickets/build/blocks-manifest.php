@@ -33,8 +33,12 @@ return array(
 		'example' => array(
 			
 		),
+		'attributes' => array(
+			
+		),
 		'supports' => array(
-			'html' => false
+			'html' => false,
+			'autoRegister' => true
 		),
 		'textdomain' => 'concert-tickets',
 		'editorScript' => 'file:./index.js',

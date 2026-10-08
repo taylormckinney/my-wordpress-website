@@ -8,8 +8,10 @@
   "icon": "tickets",
   "description": "Displays CPT 'Tickets' which are generated from concert form submissions.",
   "example": {},
+  "attributes": {},
   "supports": {
-    "html": false
+    "html": false,
+    "autoRegister": true
   },
   "textdomain": "concert-tickets",
   "editorScript": "file:./index.js",
