@@ -13,9 +13,14 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import { Disabled } from '@wordpress/components';
+import { Disabled, PanelBody, SelectControl } from '@wordpress/components';
+import { InspectorControls } from '@wordpress/block-editor';
 import { ServerSideRender } from '@wordpress/server-side-render';
 import metadata from './block.json';
+import { TextControl } from '@wordpress/components';
+
+
+
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -25,8 +30,31 @@ import metadata from './block.json';
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes }) {
+
+//TODO: upgrade to client side rendering rather than using server-side rendering?
+export default function Edit({ attributes, setAttributes }) {
 	return (
+		<>
+		<InspectorControls>
+			<PanelBody title="TicketDisplay Settings">
+				<SelectControl
+					label="Select Display Mode"
+					value={attributes.displayMode}
+					options={[
+						{ label: 'List all Tickets', value: 'list' },
+						{ label: 'Display single Ticket', value: 'single' }
+					]}
+					onChange={(displayMode) => {
+						setAttributes({ displayMode });
+					}}
+				/>
+				<TextControl
+					label="Optionally Specify Ticket ID"
+					value={attributes.ticketId}
+					onChange={(ticketId) => setAttributes({ ticketId })}
+				/>
+			</PanelBody>
+		</InspectorControls>
 		<div {...useBlockProps()}>
 			<Disabled>
 				<ServerSideRender
@@ -35,5 +63,6 @@ export default function Edit({ attributes }) {
 				/>
 			</Disabled>
 		</div>
+		</>
 	);
 }

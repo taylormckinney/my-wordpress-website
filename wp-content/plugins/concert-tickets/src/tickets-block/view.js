@@ -21,5 +21,14 @@
  */
  
 /* eslint-disable no-console */
-console.log("Hello World! (from create-block-concert-tickets&#x2F;tickets-block block)");
+//Add click event listeners to each ticket element to redirect to the ticket's permalink when clicked
+const tickets = document.getElementsByClassName('ticket');
+for (const ticket of tickets) {
+    ticket.addEventListener('click', () => {
+        console.log("Ticket " + ticket.id + " clicked!");
+        const permalink = document.getElementById("link" + ticket.id).href;
+        window.location.href = permalink; 
+    });
+}
+
 /* eslint-enable no-console */

@@ -8,11 +8,22 @@
 	"icon": "tickets",
 	"description": "Displays CPT 'Tickets' which are generated from concert form submissions.",
 	"example": {},
-	"attributes": {},
+	"attributes": {
+		"displayMode": {
+			"type": "string",
+			"default": "list"
+		},
+		"ticketId": {
+			"type": "string",
+			"default": ""
+		}
+	},
 	"supports": {
 		"html": false,
-		"autoRegister": true
+		"autoRegister": true,
+		"align": true
 	},
+	"usesContext": ["postId", "postType"],
 	"textdomain": "concert-tickets",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

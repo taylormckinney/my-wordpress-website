@@ -6,7 +6,118 @@
  */
 
 .wp-block-concert-tickets-tickets-block {
-	background-color: #21759b;
-	color: #fff;
+	background-color: #DECDF5;
 	padding: 2px;
+}
+
+/** 
+* CSS for Concert Tickets display, heavily inspired by/using below code example as a base: 
+* https://codepen.io/ahmedbeheiry/pen/rNBQOLE
+*/
+$price_bg: #AB2346;
+$rip_cut_size: 20px;
+$rip_border_size: calc($rip_cut_size / 4);
+.ticket {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	width: 700px;
+	margin: 100px;
+	filter: drop-shadow(2px 5px 5px rgba(0, 0, 0, 0.15));
+
+	&__details {
+		flex: 3;
+		background-color: #fff;
+		min-height: 150px;
+		padding: 1rem;
+		border-radius: 5px 0 0 5px;
+		
+		.ticket__title {
+			margin-top: 0;
+			color: #042A2B;
+			text-shadow: 1px 1px 2px #70A9A1;
+			text-align: center;
+			a {
+				text-decoration: none; //remove underline from link
+			}
+		}
+		
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			
+			li {
+				margin: .7rem 0;
+			}
+		}
+
+		h4 {
+			text-align: center;
+			color: #63264A;
+		}
+	}
+
+	&__rip {
+		position: relative;
+		background-color: #fff;
+		background-image: linear-gradient(90deg, #fff 49%, $price_bg 50%);
+		margin: calc($rip_cut_size / 2) 0;
+		width: $rip_cut_size;
+
+		&::before,
+		&::after {
+			position: absolute;
+			content: "";
+			width: $rip_cut_size;
+			height: $rip_cut_size;
+			border: $rip_border_size solid transparent;
+			border-top-color: #fff;
+			left: 50%;
+			transform: translateX(-50%) rotate(135deg);
+			border-radius: 50%;
+		}
+
+		&::before {
+			top: - ( $rip_cut_size + $rip_border_size );
+			border-top-color: $price_bg;
+			border-right-color: #fff;
+		}
+
+		&::after {
+			border-right-color: $price_bg;
+			border-top-color: #fff;
+			bottom: - ( $rip_cut_size + $rip_border_size );
+			transform: translateX(-50%) rotate(-45deg);
+		}
+	}
+
+	&__seats {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		flex: 1;
+		background-color: $price_bg;
+		min-height: 150px;
+		padding: 1rem;
+		border-radius: 0 5px 5px 0;
+		color: #fff;
+		
+		.heading {
+			font-size: 1rem;
+			margin-bottom: .6rem;
+			color: #ffcdde;
+			margin-left: -5px;
+			
+		}
+		
+		.seatInfo {
+			font-size: 2rem;
+			font-weight: bold;
+			margin-left: -5px;
+			text-transform: uppercase;
+			text-align: center;
+		}
+	}
 }

@@ -34,11 +34,23 @@ return array(
 			
 		),
 		'attributes' => array(
-			
+			'displayMode' => array(
+				'type' => 'string',
+				'default' => 'list'
+			),
+			'ticketId' => array(
+				'type' => 'string',
+				'default' => ''
+			)
 		),
 		'supports' => array(
 			'html' => false,
-			'autoRegister' => true
+			'autoRegister' => true,
+			'align' => true
+		),
+		'usesContext' => array(
+			'postId',
+			'postType'
 		),
 		'textdomain' => 'concert-tickets',
 		'editorScript' => 'file:./index.js',

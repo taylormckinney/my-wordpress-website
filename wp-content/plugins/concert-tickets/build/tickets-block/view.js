@@ -1,1 +1,1 @@
-console.log("Hello World! (from create-block-concert-tickets&#x2F;tickets-block block)");
+(()=>{const e=document.getElementsByClassName("ticket");for(const t of e)t.addEventListener("click",()=>{console.log("Ticket "+t.id+" clicked!");const e=document.getElementById("link"+t.id).href;window.location.href=e})})();

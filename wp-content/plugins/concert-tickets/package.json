@@ -23,7 +23,8 @@
 		"@wordpress/block-editor": "latest",
 		"@wordpress/blocks": "latest",
 		"@wordpress/i18n": "latest",
-		"@wordpress/server-side-render": "^6.33.0"
+		"@wordpress/server-side-render": "^6.33.0",
+		"toastify-js": "^1.12.0"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^34.1.0"

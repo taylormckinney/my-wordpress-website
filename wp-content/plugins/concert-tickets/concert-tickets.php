@@ -41,8 +41,8 @@ function tickets_process_submission()
 	check_ajax_referer('tickets_process_submission', 'nonce');
 
 	$artist = sanitize_text_field($_POST['artist']);
-	$date = sanitize_text_field($_POST['date']);
-	$city = sanitize_text_field($_POST['venue_city']);
+	$date = isset($_POST['date']) ? sanitize_text_field($_POST['date']) : '';
+	$city = isset($_POST['venue_city']) ? sanitize_text_field($_POST['venue_city']) : '';
 
 	$errors = array();
 	//TODO: validate inputs!!!!!
@@ -51,8 +51,14 @@ function tickets_process_submission()
 	}
 
 	$setlistBaseUrl = 'https://api.setlist.fm/rest/1.0/search/setlists?';
-	$searchURL = $setlistBaseUrl . 'artistName=' . urlencode($artist) . '&date=' . urlencode($date) . '&cityName=' . urlencode($city);
-
+	$searchURL = $setlistBaseUrl . 'artistName=' . urlencode($artist);
+	if (!empty($date)) {
+		$searchURL .= '&date=' . urlencode($date);
+	}
+	if (!empty($city)) {
+		$searchURL .= '&cityName=' . urlencode($city);
+	}
+	error_log("searchURL: " . $searchURL);
 	$apiResponse = wp_remote_get($searchURL, array(
 		'headers' => array(
 			'x-api-key' => get_option('setlist_fm_api_key'), // Retrieve the API key from the WordPress options table
@@ -137,7 +143,7 @@ function create_new_ticket()
 		'tax_input' => array(
 			'artist' => sanitize_text_field($show_data['artist']['name']),
 			'venue' => sanitize_text_field($show_data['venue']['name']),
-			//'festival' => sanitize_text_field($show_data['eventDate']), //to be implemented after regular concerts
+			//'festival' => sanitize_text_field($show_data['eventDate']), //TODO: to be implemented after regular concerts
 		),
 		'meta_input' => array(
 			'date' => sanitize_text_field($show_data['eventDate']),

@@ -6,17 +6,21 @@
 if (document.getElementById('concert-form')) {
 
     const concertForm = document.getElementById('concert-form');
+
+    
+
     concertForm.addEventListener('submit', function (event) {
         event.preventDefault();
         const searchResultsDiv = document.getElementById('searchResults');
         searchResultsDiv.textContent = ''; //clear any previous search results
         var concertFormData = new FormData(concertForm);
-
-        //Date comes from form in YYYY-MM-DD format
-        let date = (concertFormData.get('date')).split('-');
-        //Date format required by setlist.fm API is DD-MM-YYYY 
-        let dateString = date[2] + '-' + date[1] + '-' + date[0];
-        concertFormData.set('date', dateString);
+        if (concertFormData.get('date') != '') {
+            //Date comes from form in YYYY-MM-DD format
+            let date = (concertFormData.get('date')).split('-');
+            //Date format required by setlist.fm API is DD-MM-YYYY
+            let dateString = date[2] + '-' + date[1] + '-' + date[0];
+            concertFormData.set('date', dateString);
+        }
 
         //appended to facilitate the AJAX call
         concertFormData.append('action', 'tickets_process_submission');
@@ -30,7 +34,7 @@ if (document.getElementById('concert-form')) {
             processData: false,
             contentType: false,
             dataType: 'json',
-            beforeSend: function() {
+            beforeSend: function () {
                 // Disable the submit button and change its text to indicate loading
                 concertForm.querySelector('input[type="submit"]').disabled = true;
                 concertForm.querySelector('input[type="submit"]').value = 'Searching...';
@@ -39,15 +43,14 @@ if (document.getElementById('concert-form')) {
             success: function (response) {
                 if (response.success) { //verifies API call was successful, not just AJAX call
                     const shows = response.data.setlist;
-                    searchResultsDiv.innerHTML = '<h2>Select the show you would like to create a ticket for:</h2>'; //clear previous search results before adding new ones
+                    const heading = document.createElement('h2');
+                    heading.textContent = 'Select the show you would like to create a ticket for:';
+                    const results = document.createDocumentFragment();
                     shows.forEach(function (show) {
-                        searchResultsDiv.innerHTML += '<div class="show-result"><h3>' + show.artist.name + ' on ' + show.eventDate + '</h3><p>Venue: ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '</p><a href="' + show.url + '" target="_blank">View Setlist on Setlist.fm</a><button class="btn btn-primary" id="select-show-' + show.id + '">Select this show</button></div>';
-                        document.getElementById('select-show-' + show.id).addEventListener('click', function () {
-                            selectShow(show);
-                        });
+                        results.append(createShowResult(show));
                     });
+                    searchResultsDiv.replaceChildren(heading, results);
 
-                    
 
                 } else {
                     searchResultsDiv.textContent = 'Error occurred while processing your request: ' + response.data;
@@ -56,7 +59,7 @@ if (document.getElementById('concert-form')) {
             error: function () {
                 searchResultsDiv.textContent = 'Network error occurred while processing your request. Try again';
             },
-            complete: function() {
+            complete: function () {
                 // Re-enable the submit button and reset its text
                 concertForm.querySelector('input[type="submit"]').disabled = false;
                 concertForm.querySelector('input[type="submit"]').value = 'Search for Setlists';
@@ -95,8 +98,46 @@ if (document.getElementById('concert-form')) {
             closeModal();
         }
     });
+    //After API returns, render each returned show as div w/details & a button to select that show to create ticket
+    function createShowResult(show) {
+        const result = document.createElement('div');
+        result.className = 'show-result';
 
-    //After form is submitted & API is searched, user selects a show from results: 
+        const heading = document.createElement('h3');
+        heading.textContent = show.artist.name + ' on ' + show.eventDate;
+        result.append(heading);
+
+        const venue = document.createElement('p');
+        venue.textContent = 'Venue: ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state;
+        result.append(venue);
+
+        if (typeof show.url === 'string' && show.url.startsWith('https://www.setlist.fm/')) {
+            const setlistLink = document.createElement('a');
+            setlistLink.href = show.url;
+            setlistLink.target = '_blank';
+            setlistLink.rel = 'noopener noreferrer';
+            setlistLink.textContent = 'View Setlist on Setlist.fm';
+            result.append(setlistLink);
+        } else {
+            const unavailableLink = document.createElement('span');
+            unavailableLink.textContent = 'Setlist link unavailable';
+            result.append(unavailableLink);
+        }
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-primary';
+        button.id = 'select-show-' + show.id;
+        button.textContent = 'Select this show';
+        button.addEventListener('click', function () {
+            selectShow(show);
+        });
+        result.append(button);
+
+        return result;
+    }
+
+    //After user selects a show from results, render modal to confirm/add seat details, then create ticket: 
     function selectShow(show) {
         openModal();
 
@@ -132,8 +173,11 @@ if (document.getElementById('concert-form')) {
                 method: 'POST',
                 data: showData,
                 dataType: 'json',
-                beforeSend: function() {
-                    // Optionally show a loading spinner or message
+                beforeSend: function () {
+                    // Disable the submit button and change its text to indicate loading
+                ticketForm.querySelector('input[type="submit"]').disabled = true;
+                ticketForm.querySelector('input[type="submit"]').value = 'Creating Ticket...';
+                document.body.style.cursor = 'wait';
                 },
                 success: function (response) {
                     console.log('Ticket created successfully:', response);
@@ -150,7 +194,7 @@ if (document.getElementById('concert-form')) {
 
 
         const details = document.getElementById("selectedConcertDetails");
-        details.textContent = 'You are creating a ticket for the ' + show.artist.name + ' concert on ' + show.date + ' at ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '.';
+        details.textContent = 'You are creating a ticket for the ' + show.artist.name + ' concert on ' + show.eventDate + ' at ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '.';
 
         const genAdmCheckbox = document.getElementById("generalAdmission");
         genAdmCheckbox.addEventListener('change', function () {
@@ -174,8 +218,6 @@ if (document.getElementById('concert-form')) {
     }
 
 }
-
-
 
 
 
