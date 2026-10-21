@@ -83,8 +83,11 @@ define( 'WP_DEBUG', true );
 /* Add any custom values between this line and the "stop editing" line. */
 
 define( 'WP_DEBUG_LOG', true );
-define( 'WP_DEBUG_DISPLAY', false );
+define( 'WP_DEBUG_DISPLAY', true );
 
+define( 'DB_NAME', 'wordpress' );
+define( 'SCRIPT_DEBUG', false );
+define( 'WP_ENVIRONMENT_TYPE', 'local' );
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */

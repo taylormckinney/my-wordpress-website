@@ -1,17 +1,40 @@
-[08-Oct-2026 20:03:08 UTC] Automatic updates starting...
-[08-Oct-2026 20:03:08 UTC]   Automatic plugin updates starting...
-[08-Oct-2026 20:03:08 UTC]   Automatic plugin updates complete.
-[08-Oct-2026 20:03:08 UTC] Automatic updates complete.
-[08-Oct-2026 20:55:36 UTC] PHP Warning:  Array to string conversion in /wordpress/wp-content/plugins/concert-tickets/build/tickets-block/render.php on line 34
-[08-Oct-2026 20:59:16 UTC] PHP Warning:  Attempt to read property "name" on array in /wordpress/wp-content/plugins/concert-tickets/build/tickets-block/render.php on line 34
-[12-Oct-2026 15:38:10 UTC] Automatic updates starting...
-[12-Oct-2026 15:38:11 UTC]   Automatic plugin updates starting...
-[12-Oct-2026 15:38:11 UTC]   Automatic plugin updates complete.
-[12-Oct-2026 15:38:11 UTC] Automatic updates complete.
-[12-Oct-2026 18:23:10 UTC] searchURL: https://api.setlist.fm/rest/1.0/search/setlists?artistName=mumford+and+sons&date=undefined-undefined-&cityName=charlotte
-[12-Oct-2026 18:24:43 UTC] searchURL: https://api.setlist.fm/rest/1.0/search/setlists?artistName=mumford+and+sons&date=undefined-undefined-&cityName=charlotte
-[12-Oct-2026 18:26:14 UTC] searchURL: https://api.setlist.fm/rest/1.0/search/setlists?artistName=mumford+and+sons&date=undefined-undefined-&cityName=charlotte
-[12-Oct-2026 18:41:04 UTC] searchURL: https://api.setlist.fm/rest/1.0/search/setlists?artistName=mumford+and+sons&cityName=charlotte
-[12-Oct-2026 18:43:50 UTC] searchURL: https://api.setlist.fm/rest/1.0/search/setlists?artistName=mumford+and+sons&cityName=charlotte
-[12-Oct-2026 18:46:29 UTC] searchURL: https://api.setlist.fm/rest/1.0/search/setlists?artistName=mumford+and+sons&cityName=charlotte
-[12-Oct-2026 19:08:15 UTC] searchURL: https://api.setlist.fm/rest/1.0/search/setlists?artistName=mumford+and+sons&cityName=charlotte
+[21-Oct-2026 17:58:50 UTC] Automatic updates starting...
+[21-Oct-2026 17:58:50 UTC]   Automatic plugin updates starting...
+[21-Oct-2026 17:58:50 UTC]   Automatic plugin updates complete.
+[21-Oct-2026 17:58:50 UTC] Automatic updates complete.
+[21-Oct-2026 18:41:15 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "displayMode" in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code:1
+Stack trace:
+#0 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39): eval()
+#1 [internal function]: Eval_Command->__invoke(Array, Array)
+#2 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func(Array, Array, Array)
+#3 [internal function]: WP_CLI\Dispatcher\CommandFactory::{closure:WP_CLI\Dispatcher\CommandFactory::create_subcommand():97}(Array, Array)
+#4 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func(Object(Closure), Array, Array)
+#5 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke(Array, Array, Array)
+#6 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command(Array, Array)
+#7 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(136): WP_CLI\Runner->run_command_and_exit()
+#8 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1228): WP_CLI\Runner->do_early_invoke('before_wp_load')
+#9 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
+#10 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process(Object(WP_CLI\Bootstrap\BootstrapState))
+#11 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
+#12 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/php/boot-phar.php(20): include('phar://C:/Users...')
+#13 C:\Users\taylo\AppData\Local\studio_app\app-1.22.0\resources\cli\wp-files\wp-cli\wp-cli.phar(4): include('phar://C:/Users...')
+#14 {main}
+  thrown in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code on line 1
+[21-Oct-2026 18:41:16 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "register_tickets_post_type" in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code:1
+Stack trace:
+#0 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39): eval()
+#1 [internal function]: Eval_Command->__invoke(Array, Array)
+#2 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func(Array, Array, Array)
+#3 [internal function]: WP_CLI\Dispatcher\CommandFactory::{closure:WP_CLI\Dispatcher\CommandFactory::create_subcommand():97}(Array, Array)
+#4 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func(Object(Closure), Array, Array)
+#5 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke(Array, Array, Array)
+#6 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command(Array, Array)
+#7 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(136): WP_CLI\Runner->run_command_and_exit()
+#8 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1228): WP_CLI\Runner->do_early_invoke('before_wp_load')
+#9 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
+#10 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process(Object(WP_CLI\Bootstrap\BootstrapState))
+#11 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
+#12 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/php/boot-phar.php(20): include('phar://C:/Users...')
+#13 C:\Users\taylo\AppData\Local\studio_app\app-1.22.0\resources\cli\wp-files\wp-cli\wp-cli.phar(4): include('phar://C:/Users...')
+#14 {main}
+  thrown in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code on line 1

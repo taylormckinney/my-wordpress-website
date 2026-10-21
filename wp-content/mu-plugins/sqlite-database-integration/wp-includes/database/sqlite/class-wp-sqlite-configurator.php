@@ -9,12 +9,14 @@
  * The configurator ensures that tables required for emulating MySQL behaviors
  * are created and populated with necessary data. It is also able to partially
  * repair and update these tables and metadata in case of database corruption.
+ *
+ * @access private
  */
 class WP_SQLite_Configurator {
 	/**
 	 * The SQLite driver instance.
 	 *
-	 * @var WP_PDO_MySQL_On_SQLite
+	 * @var WP_MySQL_On_SQLite
 	 */
 	private $driver;
 
@@ -35,11 +37,11 @@ class WP_SQLite_Configurator {
 	/**
 	 * Constructor.
 	 *
-	 * @param WP_PDO_MySQL_On_SQLite               $driver         The SQLite driver instance.
+	 * @param WP_MySQL_On_SQLite               $driver         The SQLite driver instance.
 	 * @param WP_SQLite_Information_Schema_Builder $schema_builder The information schema builder instance.
 	 */
 	public function __construct(
-		WP_PDO_MySQL_On_SQLite $driver,
+		WP_MySQL_On_SQLite $driver,
 		WP_SQLite_Information_Schema_Builder $schema_builder
 	) {
 		$this->driver               = $driver;
@@ -100,7 +102,7 @@ class WP_SQLite_Configurator {
 			sprintf(
 				'CREATE TABLE IF NOT EXISTS %s (name TEXT PRIMARY KEY, value TEXT)',
 				$this->driver->get_connection()->quote_identifier(
-					WP_PDO_MySQL_On_SQLite::GLOBAL_VARIABLES_TABLE_NAME
+					WP_MySQL_On_SQLite::GLOBAL_VARIABLES_TABLE_NAME
 				)
 			)
 		);
@@ -260,11 +262,11 @@ class WP_SQLite_Configurator {
 			sprintf(
 				'INSERT INTO %s (name, value) VALUES (?, ?) ON CONFLICT(name) DO UPDATE SET value = ?',
 				$this->driver->get_connection()->quote_identifier(
-					WP_PDO_MySQL_On_SQLite::GLOBAL_VARIABLES_TABLE_NAME
+					WP_MySQL_On_SQLite::GLOBAL_VARIABLES_TABLE_NAME
 				)
 			),
 			array(
-				WP_PDO_MySQL_On_SQLite::DRIVER_VERSION_VARIABLE_NAME,
+				WP_MySQL_On_SQLite::DRIVER_VERSION_VARIABLE_NAME,
 				SQLITE_DRIVER_VERSION,
 				SQLITE_DRIVER_VERSION,
 			)

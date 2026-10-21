@@ -8,6 +8,8 @@
  * representation, and precomputes a lookup table for quick branch selection.
  *
  * @TODO: Add more details about the grammar implementation.
+ *
+ * @access private
  */
 class WP_Parser_Grammar {
 	/**
@@ -32,6 +34,7 @@ class WP_Parser_Grammar {
 	public $lookahead_is_match_possible = array();
 	public $lowest_non_terminal_id;
 	public $highest_terminal_id;
+	public $native_grammar;
 
 	public function __construct( array $rules ) {
 		$this->inflate( $rules );
