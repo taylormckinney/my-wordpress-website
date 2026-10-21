@@ -58,7 +58,7 @@ function tickets_process_submission()
 	if (!empty($city)) {
 		$searchURL .= '&cityName=' . urlencode($city);
 	}
-	error_log("searchURL: " . $searchURL);
+	
 	$apiResponse = wp_remote_get($searchURL, array(
 		'headers' => array(
 			'x-api-key' => get_option('setlist_fm_api_key'), // Retrieve the API key from the WordPress options table
@@ -91,7 +91,6 @@ function create_new_ticket()
 	if (!is_array($show_data)) {
 		wp_send_json_error('Invalid show payload.');
 	}
-	//error_log("show data: " . print_r($show_data, true));
 	// Normalize the sets structure. Setlist.fm returns sets => ['set' => [ ... ]]
 	$setlist = array();
 	if (isset($show_data['sets'])) {
@@ -102,7 +101,10 @@ function create_new_ticket()
 		}
 	}
 
-	$content = $show_data['info'] ?? "";
+	$content = '';
+	if(isset($show_data['info']) && !empty($show_data['info'])) {
+		$content .= '<span class="info">' . esc_html($show_data['info']) . '</span>';
+	}
 
 	foreach ($setlist as $set) {
 		$set_name = is_array($set) && isset($set['name']) ? $set['name'] : (is_array($set) && isset($set['encore']) ? 'Encore' : '');
@@ -122,20 +124,39 @@ function create_new_ticket()
 
 		foreach ($songs as $s) {
 			$song_name = '';
+			$song_extras = [];
 			if (is_array($s) && isset($s['name'])) {
 				$song_name = $s['name'];
+				if (isset($s['info'])) {
+					$song_extras['info'] = $s['info'];
+				}
+				if (isset($s['cover'])) {
+					$song_extras['cover'] = $s['cover']['name'] . ' cover';
+				}
+				if (isset($s['with'])) {
+					$song_extras['with'] = 'with ' . $s['with']['name'];
+				}
 			} elseif (is_string($s)) {
 				$song_name = $s;
 			}
-			$content .= '<li>' . esc_html($song_name) . '</li>';
+
+			if (!empty($song_extras)) {
+				$content .= '<li>' . esc_html($song_name) . ' <span class="info"> <small>(' . implode(', ', array_map('esc_html', $song_extras)) . ')</small></span></li>';
+			} else {
+				$content .= '<li>' . esc_html($song_name) . '</li>';
+			}
+
 		}
 
 		$content .= '</ul>';
 	}
+	//for creating human-readable date
+	$date = date_create($show_data['eventDate']);
+	$pretty_date = date_format($date, 'F j, Y');
 
 
 	$ticket_data = array(
-		'post_title' => $title = sanitize_text_field($show_data['artist']['name'] . ' - ' . $show_data['eventDate']),
+		'post_title' => $title = sanitize_text_field($show_data['artist']['name'] . ' - ' . $pretty_date),
 		'post_excerpt' => $show_data['venue']['name'] . ', ' . $show_data['venue']['city']['name'],
 		'post_content' => $content,
 		'post_status' => 'publish',
@@ -143,9 +164,12 @@ function create_new_ticket()
 		'tax_input' => array(
 			'artist' => sanitize_text_field($show_data['artist']['name']),
 			'venue' => sanitize_text_field($show_data['venue']['name']),
+			'concert_month' => sanitize_text_field(date_format($date, 'F')),
+			'concert_year' => sanitize_text_field(date_format($date, 'Y')),
 			//'festival' => sanitize_text_field($show_data['eventDate']), //TODO: to be implemented after regular concerts
 		),
 		'meta_input' => array(
+			'pretty_date' => $pretty_date,
 			'date' => sanitize_text_field($show_data['eventDate']),
 			'state' => sanitize_text_field($show_data['venue']['city']['state']),
 			'city' => sanitize_text_field($show_data['venue']['city']['name']),
@@ -173,12 +197,23 @@ function create_new_ticket()
 add_action('wp_enqueue_scripts', 'ajax_tickets_enqueue_scripts');
 function ajax_tickets_enqueue_scripts()
 {
+	// enqueue script to allow for import of Toastify in js file 
+	$asset_file = plugin_dir_path(__FILE__) . 'build/form/tickets-form-submission.asset.php';
+	$asset = require $asset_file;
+	$dependencies = array_unique(array_merge($asset['dependencies'], array('jquery')));
+
 	wp_enqueue_script(
 		'tickets-block-form',
-		plugin_dir_url(__FILE__) . 'tickets-form-submission.js',
-		array('jquery'),
-		null,
+		plugin_dir_url(__FILE__) . 'build/form/tickets-form-submission.js',
+		$dependencies,
+		$asset['version'],
 		true
+	);
+	wp_enqueue_style(
+		'tickets-block-form',
+		plugin_dir_url(__FILE__) . 'build/form/tickets-form-submission.css',
+		array(),
+		$asset['version']
 	);
 	wp_localize_script(
 		'tickets-block-form',
@@ -191,4 +226,3 @@ function ajax_tickets_enqueue_scripts()
 	);
 
 }
-

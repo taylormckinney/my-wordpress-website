@@ -127,6 +127,18 @@ function register_tickets_meta() {
         'show_in_rest' => true,
         'object_subtype' => 'ticket'
     ));
+    register_meta(
+        'post',
+        'pretty_date',
+        array(
+            'label' => 'Human-Readable Date',
+            'type' => 'string',
+            'default' => '',
+            'single' => true,
+            'show_in_rest' => true,
+            'object_subtype' => 'ticket'
+        ));
+
 }
 
 /**
@@ -142,6 +154,7 @@ function add_tickets_post_type_meta_keys($keys, $post) {
         $keys[] = 'seat_section';
         $keys[] = 'seat_row';
         $keys[] = 'seat_number';
+        $keys[] = 'pretty_date';
     }
     return $keys;
 }
@@ -183,5 +196,27 @@ function register_tickets_taxonomies() {
         'show_in_rest' => true,
     );
     register_taxonomy('festival', 'ticket', $festivalArgs);
+
+    $monthArgs = array(
+        'labels' => array(
+            'name' => __('Months', 'concert-tickets'),
+            'singular_name' => __('Month', 'concert-tickets'),
+        ),
+        'public' => true,
+        'hierarchical' => false,
+        'show_in_rest' => true,
+    );
+    register_taxonomy('concert_month', 'ticket', $monthArgs);
+
+    $yearArgs = array(
+        'labels' => array(
+            'name' => __('Years', 'concert-tickets'),
+            'singular_name' => __('Year', 'concert-tickets'),
+        ),
+        'public' => true,
+        'hierarchical' => false,
+        'show_in_rest' => true,
+    );
+    register_taxonomy('concert_year', 'ticket', $yearArgs);
 }
 

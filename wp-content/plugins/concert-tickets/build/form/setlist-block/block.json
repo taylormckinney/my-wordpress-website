@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "concert-tickets/setlist-block",
+  "version": "0.1.0",
+  "title": "Setlist Block",
+  "category": "widgets",
+  "icon": "tickets-alt",
+  "description": "Used to create new 'Tickets' using data from Setlist.fm API. Starts with User input",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "textdomain": "concert-tickets",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

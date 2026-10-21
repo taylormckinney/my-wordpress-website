@@ -1,3 +1,5 @@
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 /**
  * Once document is loaded, if concert form is present (ie only pages w/custom block present),
  * add event listeners on the 'Submit' buttons for both concert-form and tickets-form.
@@ -180,9 +182,16 @@ if (document.getElementById('concert-form')) {
                 document.body.style.cursor = 'wait';
                 },
                 success: function (response) {
-                    console.log('Ticket created successfully:', response);
-                    //TODO: add a toast popup to confirm to user
-                    window.location.reload(); //reload concerts page after creation of ticket
+                    Toastify({
+                        text: 'Ticket created or updated successfully!',
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#4CAF50",
+                        callback: function () {
+                            window.location.reload();
+                        }
+                    }).showToast();
 
                 },
                 error: function (response) {
@@ -218,8 +227,5 @@ if (document.getElementById('concert-form')) {
     }
 
 }
-
-
-
 
 
