@@ -45,7 +45,6 @@ return array(
 		),
 		'supports' => array(
 			'html' => false,
-			'autoRegister' => true,
 			'align' => true
 		),
 		'usesContext' => array(

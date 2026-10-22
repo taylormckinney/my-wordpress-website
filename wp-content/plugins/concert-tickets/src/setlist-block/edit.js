@@ -55,6 +55,9 @@ export default function Edit() {
 					<h2>Create or Update Ticket: </h2>
 					<p id="selectedConcertDetails"></p>
 					<form id="ticket-form" name="ticket-form" method="post">
+						<label for="includeOpeners">Include Opening Acts:</label>
+						<input type="checkbox" id="includeOpeners" name="includeOpeners"></input>
+						<div id="openersContainer"></div>
 						<label for="generalAdmission">General Admission Show</label>
 						<input type="checkbox" id="generalAdmission" name="generalAdmission"></input>
 						<fieldset id="seatDetails">

@@ -36,7 +36,7 @@ export default function Edit({ attributes, setAttributes }) {
 	return (
 		<>
 		<InspectorControls>
-			<PanelBody title="TicketDisplay Settings">
+			<PanelBody title="Ticket Display Settings">
 				<SelectControl
 					label="Select Display Mode"
 					value={attributes.displayMode}

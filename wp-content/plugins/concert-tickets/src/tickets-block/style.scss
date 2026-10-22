@@ -21,12 +21,12 @@ $rip_border_size: calc($rip_cut_size / 4);
 	position: relative;
 	display: flex;
 	flex-direction: row;
-	width: 700px;
-	margin: 100px;
+	width: min(700px, 100%);
+	margin: 100px auto;
 	filter: drop-shadow(2px 5px 5px rgba(0, 0, 0, 0.15));
 
 	&__details {
-		flex: 3;
+		flex: 3 1 0;
 		background-color: #fff;
 		min-height: 150px;
 		padding: 1rem;
@@ -97,7 +97,7 @@ $rip_border_size: calc($rip_cut_size / 4);
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		flex: 1;
+		flex: 1 1 0;
 		background-color: $price_bg;
 		min-height: 150px;
 		padding: 1rem;

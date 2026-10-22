@@ -3,7 +3,7 @@
  * Plugin Name:       Concert Tickets
  * Description:       Displays a list of concerts as a ticket.
  * Version:           0.1.0
- * Requires at least: 6.8
+ * Requires at least: 6.9
  * Requires PHP:      7.4
  * Author:            Taylor McKinney
  * License:           GPL-2.0-or-later
@@ -40,25 +40,33 @@ function tickets_process_submission()
 {
 	check_ajax_referer('tickets_process_submission', 'nonce');
 
-	$artist = sanitize_text_field($_POST['artist']);
+	$artist = isset($_POST['artist']) ? sanitize_text_field($_POST['artist']) : '';
 	$date = isset($_POST['date']) ? sanitize_text_field($_POST['date']) : '';
 	$city = isset($_POST['venue_city']) ? sanitize_text_field($_POST['venue_city']) : '';
-
+    //used for searching for openers: 
+	$venue_id = isset($_POST['venue_id']) ? sanitize_text_field($_POST['venue_id']) : '';
+	
+	//TODO: add validation for input fields, if needed
 	$errors = array();
-	//TODO: validate inputs!!!!!
 	if (!empty($errors)) {
 		wp_send_json_error(implode(', ', $errors)); //if errors in input, send back to JS 
 	}
 
-	$setlistBaseUrl = 'https://api.setlist.fm/rest/1.0/search/setlists?';
-	$searchURL = $setlistBaseUrl . 'artistName=' . urlencode($artist);
+	$searchURL = 'https://api.setlist.fm/rest/1.0/search/setlists?';
+	
+	if (!empty($artist)){
+		$searchURL .= '&artistName=' . urlencode($artist);
+	}
 	if (!empty($date)) {
 		$searchURL .= '&date=' . urlencode($date);
 	}
 	if (!empty($city)) {
 		$searchURL .= '&cityName=' . urlencode($city);
 	}
-	
+	if (!empty($venue_id)) {
+		$searchURL .= '&venueId=' . urlencode($venue_id);
+	}
+
 	$apiResponse = wp_remote_get($searchURL, array(
 		'headers' => array(
 			'x-api-key' => get_option('setlist_fm_api_key'), // Retrieve the API key from the WordPress options table
@@ -80,36 +88,22 @@ function tickets_process_submission()
 	wp_die(); //terminates AJAX handler properly
 }
 
-add_action('wp_ajax_create_new_ticket', 'create_new_ticket');
-function create_new_ticket()
-{
-	check_ajax_referer('create_new_ticket', 'nonce');
-	//programatically create new ticket using show object 
-
-	$show_data = isset($_POST['show']) ? json_decode(stripslashes($_POST['show']), true) : null;
-
-	if (!is_array($show_data)) {
-		wp_send_json_error('Invalid show payload.');
-	}
+function renderSetlistContent($data) {
 	// Normalize the sets structure. Setlist.fm returns sets => ['set' => [ ... ]]
 	$setlist = array();
-	if (isset($show_data['sets'])) {
-		if (isset($show_data['sets']['set']) && is_array($show_data['sets']['set'])) {
-			$setlist = $show_data['sets']['set'];
-		} elseif (is_array($show_data['sets'])) {
-			$setlist = $show_data['sets'];
+	if (isset($data['sets'])) {
+		if (isset($data['sets']['set']) && is_array($data['sets']['set'])) {
+			$setlist = $data['sets']['set'];
+		} elseif (is_array($data['sets'])) {
+			$setlist = $data['sets'];
 		}
 	}
-
 	$content = '';
-	if(isset($show_data['info']) && !empty($show_data['info'])) {
-		$content .= '<span class="info">' . esc_html($show_data['info']) . '</span>';
-	}
-
 	foreach ($setlist as $set) {
 		$set_name = is_array($set) && isset($set['name']) ? $set['name'] : (is_array($set) && isset($set['encore']) ? 'Encore' : '');
-		$content .= '<h3>' . esc_html($set_name) . '</h3>';
-		$content .= '<ul>';
+		$heading_html = '<h3 class="wp-block-heading">' . esc_html($set_name) . '</h3>';
+		$content .= get_comment_delimited_block_content('core/heading', array('level' => 3), $heading_html);
+		$list_items = array();
 
 		// Normalize songs: Setlist.fm returns songs under ['song'] which may be
 		// a numeric array or a single associative array.
@@ -141,19 +135,118 @@ function create_new_ticket()
 			}
 
 			if (!empty($song_extras)) {
-				$content .= '<li>' . esc_html($song_name) . ' <span class="info"> <small>(' . implode(', ', array_map('esc_html', $song_extras)) . ')</small></span></li>';
+				$list_item_html = '<li>' . esc_html($song_name) . ' <span class="info"> <small>(' . implode(', ', array_map('esc_html', $song_extras)) . ')</small></span></li>';
 			} else {
-				$content .= '<li>' . esc_html($song_name) . '</li>';
+				$list_item_html = '<li>' . esc_html($song_name) . '</li>';
 			}
+			$list_items[] = get_comment_delimited_block_content('core/list-item', array(), $list_item_html);
 
 		}
 
-		$content .= '</ul>';
+		$list_html = '<ul class="wp-block-list">' . implode('', $list_items) . '</ul>';
+		$content .= get_comment_delimited_block_content('core/list', array(), $list_html);
 	}
+
+	return $content;
+}
+
+add_action('wp_ajax_create_new_ticket', 'create_new_ticket');
+function create_new_ticket()
+{
+	check_ajax_referer('create_new_ticket', 'nonce');
+	//programatically create new ticket using show object 
+
+	$show_data = isset($_POST['show']) ? json_decode(stripslashes($_POST['show']), true) : null;
+
+
+	if (!is_array($show_data)) {
+		wp_send_json_error('Invalid show payload.');
+	}
+	
+	
+
+	$content = '';
+	if(isset($show_data['info']) && !empty($show_data['info'])) {
+		$info_html = '<p><span class="info">' . esc_html($show_data['info']) . '</span></p>';
+		$content .= get_comment_delimited_block_content('core/paragraph', array(), $info_html);
+	}
+	$content .= renderSetlistContent($show_data);
+
+	
 	//for creating human-readable date
 	$date = date_create($show_data['eventDate']);
 	$pretty_date = date_format($date, 'F j, Y');
 
+	$meta_input = array(
+		'pretty_date' => $pretty_date,
+		'date' => sanitize_text_field($show_data['eventDate']),
+		'state' => sanitize_text_field($show_data['venue']['city']['state']),
+		'city' => sanitize_text_field($show_data['venue']['city']['name']),
+		'tour_name' => sanitize_text_field($show_data['tour']['name'] ?? ''),
+	);
+	//only add/update seat info if value is provided in show data & existing ticket does not already have seat info
+	$seat_data = isset($show_data['seat']) && is_array($show_data['seat']) ? $show_data['seat'] : array();
+	foreach (array(
+		'section' => 'seat_section',
+		'row' => 'seat_row',
+		'number' => 'seat_number',
+	) as $seat_field => $meta_key) {
+		if (isset($seat_data[$seat_field]) && is_scalar($seat_data[$seat_field])) {
+			$seat_value = sanitize_text_field((string) $seat_data[$seat_field]);
+			if ($seat_value !== '') {
+				$meta_input[$meta_key] = $seat_value;
+			}
+		}
+	}
+
+	//normalize/process openers data for storage in post meta or storing setlist: 
+	$opener_names = array();
+	$opener_setlists = array();
+	if (isset($show_data['openers']) && is_array($show_data['openers'])) {
+		foreach ($show_data['openers'] as $opener) {
+			if (!is_array($opener) || !isset($opener['name']) || !is_scalar($opener['name'])) {
+				continue;
+			}
+
+			$opener_name = sanitize_text_field((string) $opener['name']);
+			if ($opener_name === '') {
+				continue;
+			}
+
+			$opener_names[] = $opener_name;
+			if (isset($opener['setlist']) && is_array($opener['setlist'])) {
+				$opener_setlists[] = array(
+					'name' => $opener_name,
+					'setlist' => $opener['setlist'],
+				);
+			}
+		}
+	}
+
+	error_log('Opener names: ' . print_r($opener_names, true));
+	error_log('Opener setlists: ' . print_r($opener_setlists, true));
+	$accordion_items = array();
+	foreach ($opener_setlists as $opener_setlist) {
+		$setlist_content = renderSetlistContent($opener_setlist['setlist']);
+		if ($setlist_content === '') {
+			continue;
+		}
+
+		$heading_html = sprintf(
+			'<h3 class="wp-block-accordion-heading has-icon has-icon-right"><button type="button" class="wp-block-accordion-heading__toggle"><span class="wp-block-accordion-heading__toggle-title">%s</span><span class="wp-block-accordion-heading__toggle-icon" aria-hidden="true">+</span></button></h3>',
+			esc_html($opener_setlist['name'])
+		);
+		$heading_block = get_comment_delimited_block_content('core/accordion-heading', array(), $heading_html);
+		$panel_html = '<div role="region" class="wp-block-accordion-panel">' . $setlist_content . '</div>';
+		$panel_block = get_comment_delimited_block_content('core/accordion-panel', array(), $panel_html);
+		$item_html = '<div class="wp-block-accordion-item">' . $heading_block . $panel_block . '</div>';
+		$accordion_items[] = get_comment_delimited_block_content('core/accordion-item', array(), $item_html);
+	}
+
+	if (!empty($accordion_items)) {
+		$accordion_html = '<div role="group" class="wp-block-accordion">' . implode('', $accordion_items) . '</div>';
+		$content .= get_comment_delimited_block_content('core/accordion', array(), $accordion_html);
+	}
 
 	$ticket_data = array(
 		'post_title' => $title = sanitize_text_field($show_data['artist']['name'] . ' - ' . $pretty_date),
@@ -168,16 +261,7 @@ function create_new_ticket()
 			'concert_year' => sanitize_text_field(date_format($date, 'Y')),
 			//'festival' => sanitize_text_field($show_data['eventDate']), //TODO: to be implemented after regular concerts
 		),
-		'meta_input' => array(
-			'pretty_date' => $pretty_date,
-			'date' => sanitize_text_field($show_data['eventDate']),
-			'state' => sanitize_text_field($show_data['venue']['city']['state']),
-			'city' => sanitize_text_field($show_data['venue']['city']['name']),
-			'tour_name' => sanitize_text_field($show_data['tour']['name'] ?? ''),
-			'seat_section' => sanitize_text_field($show_data['seat']['section']),
-			'seat_row' => sanitize_text_field($show_data['seat']['row'] ?? ''),
-			'seat_number' => sanitize_text_field($show_data['seat']['number'] ?? ''),
-		),
+		'meta_input' => $meta_input,
 	);
 	$post_id = post_exists($title);
 	if ($post_id) { //update existing post
@@ -187,6 +271,13 @@ function create_new_ticket()
 
 	if (is_wp_error($ticket_id)) {
 		wp_send_json_error('Error creating ticket.');
+	}
+
+	if (isset($show_data['openers']) && is_array($show_data['openers'])) {
+		delete_post_meta($ticket_id, 'opener');
+		foreach ($opener_names as $opener_name) {
+			add_post_meta($ticket_id, 'opener', $opener_name);
+		}
 	}
 
 	wp_send_json_success($ticket_id);
@@ -209,6 +300,7 @@ function ajax_tickets_enqueue_scripts()
 		$asset['version'],
 		true
 	);
+	
 	wp_enqueue_style(
 		'tickets-block-form',
 		plugin_dir_url(__FILE__) . 'build/form/tickets-form-submission.css',
@@ -221,7 +313,7 @@ function ajax_tickets_enqueue_scripts()
 		array(
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'form_nonce' => wp_create_nonce('tickets_process_submission'),
-			'create_ticket_nonce' => wp_create_nonce('create_new_ticket')
+			'create_ticket_nonce' => wp_create_nonce('create_new_ticket'),
 		)
 	);
 

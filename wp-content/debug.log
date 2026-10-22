@@ -1,8 +1,23 @@
-[21-Oct-2026 17:58:50 UTC] Automatic updates starting...
-[21-Oct-2026 17:58:50 UTC]   Automatic plugin updates starting...
-[21-Oct-2026 17:58:50 UTC]   Automatic plugin updates complete.
-[21-Oct-2026 17:58:50 UTC] Automatic updates complete.
-[21-Oct-2026 18:41:15 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "displayMode" in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code:1
+[22-Oct-2026 19:43:53 UTC] Opener names: Array
+(
+    [0] => Gigi Perez
+    [1] => Annabelle Dinda
+)
+
+[22-Oct-2026 19:43:53 UTC] Opener setlists: Array
+(
+    [0] => Array
+        (
+            [name] => Gigi Perez
+            [setlist] => Array
+                (
+                )
+
+        )
+
+)
+
+[22-Oct-2026 19:59:04 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "core" in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code:1
 Stack trace:
 #0 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39): eval()
 #1 [internal function]: Eval_Command->__invoke(Array, Array)
@@ -20,21 +35,134 @@ Stack trace:
 #13 C:\Users\taylo\AppData\Local\studio_app\app-1.22.0\resources\cli\wp-files\wp-cli\wp-cli.phar(4): include('phar://C:/Users...')
 #14 {main}
   thrown in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code on line 1
-[21-Oct-2026 18:41:16 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "register_tickets_post_type" in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code:1
-Stack trace:
-#0 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39): eval()
-#1 [internal function]: Eval_Command->__invoke(Array, Array)
-#2 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/CommandFactory.php(100): call_user_func(Array, Array, Array)
-#3 [internal function]: WP_CLI\Dispatcher\CommandFactory::{closure:WP_CLI\Dispatcher\CommandFactory::create_subcommand():97}(Array, Array)
-#4 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Dispatcher/Subcommand.php(497): call_user_func(Object(Closure), Array, Array)
-#5 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(470): WP_CLI\Dispatcher\Subcommand->invoke(Array, Array, Array)
-#6 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(493): WP_CLI\Runner->run_command(Array, Array)
-#7 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(136): WP_CLI\Runner->run_command_and_exit()
-#8 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php(1228): WP_CLI\Runner->do_early_invoke('before_wp_load')
-#9 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/WP_CLI/Bootstrap/LaunchRunner.php(28): WP_CLI\Runner->start()
-#10 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/bootstrap.php(84): WP_CLI\Bootstrap\LaunchRunner->process(Object(WP_CLI\Bootstrap\BootstrapState))
-#11 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/wp-cli/php/wp-cli.php(35): WP_CLI\bootstrap()
-#12 phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/php/boot-phar.php(20): include('phar://C:/Users...')
-#13 C:\Users\taylo\AppData\Local\studio_app\app-1.22.0\resources\cli\wp-files\wp-cli\wp-cli.phar(4): include('phar://C:/Users...')
-#14 {main}
-  thrown in phar://C:/Users/taylo/AppData/Local/studio_app/app-1.22.0/resources/cli/wp-files/wp-cli/wp-cli.phar/vendor/wp-cli/eval-command/src/Eval_Command.php(39) : eval()'d code on line 1
+[22-Oct-2026 20:02:09 UTC] Opener names: Array
+(
+    [0] => Gigi Perez
+    [1] => Annabelle Dinda
+)
+
+[22-Oct-2026 20:02:09 UTC] Opener setlists: Array
+(
+    [0] => Array
+        (
+            [name] => Gigi Perez
+            [setlist] => Array
+                (
+                    [id] => 534b9f8d
+                    [versionId] => g73025a91
+                    [eventDate] => 25-07-2026
+                    [lastUpdated] => 2026-08-01T19:49:56.488+0000
+                    [artist] => Array
+                        (
+                            [mbid] => 8ab64ebd-200e-47af-a3fc-92540e186214
+                            [name] => Gigi Perez
+                            [sortName] => Perez, Gigi
+                            [disambiguation] => Indie-rock singer/songwriter
+                            [url] => https://www.setlist.fm/setlists/gigi-perez-63fe8e77.html
+                        )
+
+                    [venue] => Array
+                        (
+                            [id] => 13d62169
+                            [name] => Carter-Finley Stadium
+                            [city] => Array
+                                (
+                                    [id] => 4487042
+                                    [name] => Raleigh
+                                    [state] => North Carolina
+                                    [stateCode] => NC
+                                    [coords] => Array
+                                        (
+                                            [lat] => 35.772096
+                                            [long] => -78.6386145
+                                        )
+
+                                    [country] => Array
+                                        (
+                                            [code] => US
+                                            [name] => United States
+                                        )
+
+                                )
+
+                            [url] => https://www.setlist.fm/venue/carter-finley-stadium-raleigh-nc-usa-13d62169.html
+                        )
+
+                    [sets] => Array
+                        (
+                            [set] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [song] => Array
+                                                (
+                                                    [0] => Array
+                                                        (
+                                                            [name] => Please Be Rude
+                                                        )
+
+                                                    [1] => Array
+                                                        (
+                                                            [name] => Sleeping
+                                                        )
+
+                                                    [2] => Array
+                                                        (
+                                                            [name] => At the Beach, in Every Life
+                                                        )
+
+                                                    [3] => Array
+                                                        (
+                                                            [name] => Fable
+                                                        )
+
+                                                    [4] => Array
+                                                        (
+                                                            [name] => Sugar Water
+                                                        )
+
+                                                    [5] => Array
+                                                        (
+                                                            [name] => Summertime Sadness
+                                                            [cover] => Array
+                                                                (
+                                                                    [mbid] => b7539c32-53e7-4908-bda3-81449c367da6
+                                                                    [name] => Lana Del Rey
+                                                                    [sortName] => Del Rey, Lana
+                                                                    [disambiguation] => 
+                                                                    [url] => https://www.setlist.fm/setlists/lana-del-rey-13d391fd.html
+                                                                )
+
+                                                        )
+
+                                                    [6] => Array
+                                                        (
+                                                            [name] => The Wall
+                                                        )
+
+                                                    [7] => Array
+                                                        (
+                                                            [name] => Twister
+                                                        )
+
+                                                    [8] => Array
+                                                        (
+                                                            [name] => Sailor Song
+                                                            [info] => Extended
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [url] => https://www.setlist.fm/setlist/gigi-perez/2026/carter-finley-stadium-raleigh-nc-534b9f8d.html
+                )
+
+        )
+
+)
+

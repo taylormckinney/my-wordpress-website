@@ -9,7 +9,7 @@ if (document.getElementById('concert-form')) {
 
     const concertForm = document.getElementById('concert-form');
 
-    
+
 
     concertForm.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -141,13 +141,104 @@ if (document.getElementById('concert-form')) {
 
     //After user selects a show from results, render modal to confirm/add seat details, then create ticket: 
     function selectShow(show) {
-        openModal();
+        openModal(); //opens popup modal to add seat details for ticket creation
 
         const seatData = {};
         const ticketForm = document.getElementById('ticket-form');
+        const details = document.getElementById("selectedConcertDetails");
+        details.textContent = 'You are creating a ticket for the ' + show.artist.name + ' concert on ' + show.eventDate + ' at ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '.';
 
+        const genAdmCheckbox = document.getElementById("generalAdmission");
+        genAdmCheckbox.addEventListener('change', function () {
+            const seatDetailsSet = document.getElementById("seatDetails");
+            if (this.checked) {
+                //general admission checked, seat details not needed 
+                seatDetailsSet.style.display = 'none';
+
+            }
+            else {
+                //genAdm not checked, display form fieldset for seat details
+                seatDetailsSet.style.display = 'block';
+            }
+        });
+        const openerCandidates = [];
+        const includeOpenersCheckbox = document.getElementById("includeOpeners");
+        const openersContainer = document.getElementById("openersContainer");
+        includeOpenersCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                //if user wants to include opening acts, reuses same AJAX action to query Setlist.fm API
+                openersContainer.style.display = 'block';
+                const openersData = {
+                    action: 'tickets_process_submission',
+                    nonce: tickets_ajax_data.form_nonce,
+                    date: show.eventDate,
+                    venue_id: show.venue.id
+                };
+
+                console.log("AJAX data for openers: ", openersData);
+
+                jQuery.ajax({
+                    url: tickets_ajax_data.ajax_url,
+                    type: 'POST',
+                    data: openersData,
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            const openers = response.data.setlist;
+                            
+                            if (openers.length === 1 && openers[0].artist.name === show.artist.name) {
+                                const noOpenersMsg = document.createElement('p');
+                                noOpenersMsg.textContent = 'No opening acts found for this show. Optionally, you can manually add opening acts below.';
+                                openersContainer.appendChild(noOpenersMsg);
+
+                                const manualOpenersInput = document.createElement('input');
+                                manualOpenersInput.type = 'text';
+                                manualOpenersInput.style.width = '70%';
+                                manualOpenersInput.id = 'manualOpeners';
+                                manualOpenersInput.name = 'manualOpeners';
+                                manualOpenersInput.placeholder = 'Enter opening acts separated by commas';
+                                openersContainer.appendChild(manualOpenersInput);
+                            }
+                            else {
+                                openers.forEach(function (opener) {
+                                    // Process each opener
+                                    if (opener.artist.name !== show.artist.name) { // Exclude the headliner
+                                        const openerDiv = document.createElement('div');
+                                        openerDiv.textContent = 'Opening Act: ' + opener.artist.name;
+                                        const openerCheckbox = document.createElement('input');
+                                        openerCheckbox.type = 'checkbox';
+                                        openerCheckbox.name = 'includeOpenerSetlist';
+                                        openerCheckbox.value = opener.artist.mbid;
+                                        openerDiv.appendChild(openerCheckbox);
+                                        openersContainer.appendChild(openerDiv);
+
+                                        var openerObj = {
+                                            name: opener.artist.name,
+                                            id: opener.artist.mbid || null,
+                                            setlist: opener
+                                        };
+                                        openerCandidates.push(openerObj);
+
+                                    }
+
+                                });
+                            }
+                        }
+
+                    }
+                });
+
+            }
+            else {
+                openersContainer.style.display = 'none';
+            }
+        });
+
+        //event listener for ticket details form submission, creates new ticket
         ticketForm.addEventListener('submit', function (event) {
             event.preventDefault();
+
+            //normalize seat data:
             var ticketFormData = new FormData(ticketForm);
             if (ticketFormData.get('generalAdmission')) {
                 seatData.section = 'General Admission';
@@ -161,6 +252,30 @@ if (document.getElementById('concert-form')) {
             }
             //add seat details to show data
             show.seat = seatData;
+
+            //add opening acts to show data if user selected that option
+            if (ticketFormData.get('includeOpeners')) {
+                const selectedIds = new Set(ticketFormData.getAll('includeOpenerSetlist'));
+                const manualNames = String(ticketFormData.get('manualOpeners') || '')
+                    .split(',')
+                    .map(name => name.trim())
+                    .filter(Boolean);
+
+                show.openers = [
+                    ...openerCandidates.map(opener => {
+                        const entry = { name: opener.name };
+                        //only include entire setlist if user selected so for this artist
+                        if (selectedIds.has(opener.id)) {
+                            entry.setlist = opener.setlist;
+                        }
+                        return entry;
+                    }),
+                    ...manualNames.map(name => ({ name }))
+                ];
+
+            }
+
+            console.log(show.openers);
 
 
             //submit all show data to create a new Ticket CPT (or udpate existing)
@@ -177,9 +292,9 @@ if (document.getElementById('concert-form')) {
                 dataType: 'json',
                 beforeSend: function () {
                     // Disable the submit button and change its text to indicate loading
-                ticketForm.querySelector('input[type="submit"]').disabled = true;
-                ticketForm.querySelector('input[type="submit"]').value = 'Creating Ticket...';
-                document.body.style.cursor = 'wait';
+                    ticketForm.querySelector('input[type="submit"]').disabled = true;
+                    ticketForm.querySelector('input[type="submit"]').value = 'Creating Ticket...';
+                    document.body.style.cursor = 'wait';
                 },
                 success: function (response) {
                     Toastify({
@@ -199,28 +314,9 @@ if (document.getElementById('concert-form')) {
                 }
             });
 
+
         });
 
-
-        const details = document.getElementById("selectedConcertDetails");
-        details.textContent = 'You are creating a ticket for the ' + show.artist.name + ' concert on ' + show.eventDate + ' at ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '.';
-
-        const genAdmCheckbox = document.getElementById("generalAdmission");
-        genAdmCheckbox.addEventListener('change', function () {
-            const seatDetailsSet = document.getElementById("seatDetails");
-            if (this.checked) {
-                //general admission checked, seat details not needed 
-                seatDetailsSet.style.display = 'none';
-
-            }
-            else {
-                //genAdm not checked, display form fieldset for seat details
-                seatDetailsSet.style.display = 'block';
-            }
-        });
-
-
-        //TODO: add option to also search for opening acts
 
 
 

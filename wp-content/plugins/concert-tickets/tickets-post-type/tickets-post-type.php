@@ -138,6 +138,28 @@ function register_tickets_meta() {
             'show_in_rest' => true,
             'object_subtype' => 'ticket'
         ));
+        register_meta(
+        'post',
+        'openers',
+        array(
+            'label' => 'Opening Acts',
+            'type' => 'string',
+            'default' => '',
+            'single' => false,
+            'show_in_rest' => true,
+            'object_subtype' => 'ticket'
+        ));
+        register_meta(
+        'post',
+        'opener',
+        array(
+            'label' => 'Opening Act',
+            'type' => 'string',
+            'default' => '',
+            'single' => false,
+            'show_in_rest' => true,
+            'object_subtype' => 'ticket'
+        ));
 
 }
 
@@ -155,6 +177,8 @@ function add_tickets_post_type_meta_keys($keys, $post) {
         $keys[] = 'seat_row';
         $keys[] = 'seat_number';
         $keys[] = 'pretty_date';
+        $keys[] = 'openers';
+        $keys[] = 'opener';
     }
     return $keys;
 }
@@ -219,4 +243,3 @@ function register_tickets_taxonomies() {
     );
     register_taxonomy('concert_year', 'ticket', $yearArgs);
 }
-
