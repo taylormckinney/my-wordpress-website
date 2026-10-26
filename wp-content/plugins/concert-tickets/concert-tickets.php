@@ -101,8 +101,8 @@ function renderSetlistContent($data) {
 	$content = '';
 	foreach ($setlist as $set) {
 		$set_name = is_array($set) && isset($set['name']) ? $set['name'] : (is_array($set) && isset($set['encore']) ? 'Encore' : '');
-		$heading_html = '<h3 class="wp-block-heading">' . esc_html($set_name) . '</h3>';
-		$content .= get_comment_delimited_block_content('core/heading', array('level' => 3), $heading_html);
+		$heading_html = '<h2 class="wp-block-heading concert-heading">' . esc_html($set_name) . '</h2>';
+		$content .= get_comment_delimited_block_content('core/heading', array('level' => 2), $heading_html);
 		$list_items = array();
 
 		// Normalize songs: Setlist.fm returns songs under ['song'] which may be
@@ -234,7 +234,7 @@ function create_new_ticket()
 
 		$heading_html = sprintf(
 			'<h3 class="wp-block-accordion-heading has-icon has-icon-right"><button type="button" class="wp-block-accordion-heading__toggle"><span class="wp-block-accordion-heading__toggle-title">%s</span><span class="wp-block-accordion-heading__toggle-icon" aria-hidden="true">+</span></button></h3>',
-			esc_html($opener_setlist['name'])
+			esc_html($opener_setlist['name'] . ' Setlist')
 		);
 		$heading_block = get_comment_delimited_block_content('core/accordion-heading', array(), $heading_html);
 		$panel_html = '<div role="region" class="wp-block-accordion-panel">' . $setlist_content . '</div>';

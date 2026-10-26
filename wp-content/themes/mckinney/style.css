@@ -4,3 +4,14 @@
 * Author: Taylor McKinney
 * Text Domain: mckinney
 */
+
+.info {
+    font-style: italic;
+    color: #63264A;
+
+}
+
+.concert-heading {
+    color: #042A2B;
+    text-shadow: 1px 1px 2px #70A9A1;
+}

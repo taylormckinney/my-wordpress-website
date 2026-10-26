@@ -25,7 +25,6 @@
 const tickets = document.getElementsByClassName('ticket');
 for (const ticket of tickets) {
     ticket.addEventListener('click', () => {
-        console.log("Ticket " + ticket.id + " clicked!");
         const permalink = document.getElementById("link" + ticket.id).href;
         window.location.href = permalink; 
     });

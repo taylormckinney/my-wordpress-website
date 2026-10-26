@@ -16,6 +16,24 @@
     "ticketId": {
       "type": "string",
       "default": ""
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#DECDF5"
+    },
+    "queryOptions": {
+      "type": "object",
+      "default": {
+        "post_type": "ticket"
+      }
+    },
+    "filterTaxonomy": {
+      "type": "string",
+      "default": ""
+    },
+    "filterTermId": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {

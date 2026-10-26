@@ -5,8 +5,8 @@ add_action( 'wp_enqueue_scripts', function () {
         wp_register_style( 'global-styles', false, array( 'wp-block-library' ) );
     }
 }, 0 );
-/* add_action( 'wp_enqueue_scripts', 'mckinney_enqueue_styles' );
 
+add_action( 'wp_enqueue_scripts', 'mckinney_enqueue_styles' );
 function mckinney_enqueue_styles() {
 	wp_enqueue_style( 
 		'mckinney-style', 
@@ -14,4 +14,4 @@ function mckinney_enqueue_styles() {
 	);
 }
 
- */
+ 

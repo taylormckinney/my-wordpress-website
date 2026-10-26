@@ -41,6 +41,24 @@ return array(
 			'ticketId' => array(
 				'type' => 'string',
 				'default' => ''
+			),
+			'backgroundColor' => array(
+				'type' => 'string',
+				'default' => '#DECDF5'
+			),
+			'queryOptions' => array(
+				'type' => 'object',
+				'default' => array(
+					'post_type' => 'ticket'
+				)
+			),
+			'filterTaxonomy' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'filterTermId' => array(
+				'type' => 'string',
+				'default' => ''
 			)
 		),
 		'supports' => array(

@@ -1,1 +1,1 @@
-(()=>{const e=document.getElementsByClassName("ticket");for(const t of e)t.addEventListener("click",()=>{console.log("Ticket "+t.id+" clicked!");const e=document.getElementById("link"+t.id).href;window.location.href=e})})();
+(()=>{const e=document.getElementsByClassName("ticket");for(const t of e)t.addEventListener("click",()=>{const e=document.getElementById("link"+t.id).href;window.location.href=e})})();

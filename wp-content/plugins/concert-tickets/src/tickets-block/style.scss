@@ -6,7 +6,6 @@
  */
 
 .wp-block-concert-tickets-tickets-block {
-	background-color: #DECDF5;
 	padding: 2px;
 }
 
@@ -21,8 +20,8 @@ $rip_border_size: calc($rip_cut_size / 4);
 	position: relative;
 	display: flex;
 	flex-direction: row;
-	width: min(700px, 100%);
-	margin: 100px auto;
+	width: min(800px, 100%);
+	margin: 50px auto;
 	filter: drop-shadow(2px 5px 5px rgba(0, 0, 0, 0.15));
 
 	&__details {
