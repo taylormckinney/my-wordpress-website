@@ -9,6 +9,16 @@
             "name": "single-ticket",
             "title": "Single Ticket",
             "postTypes": ["ticket"]
+        },
+        {
+            "name": "archive-ticket",
+            "title": "Archive Tickets",
+            "postTypes": ["ticket"]
+        },
+        {
+            "name": "taxonomy",
+            "title": "Ticket - Taxonomy",
+            "postTypes": ["ticket"]
         }
     ]
 }

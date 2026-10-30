@@ -32,29 +32,43 @@ function concerts_tickets_block_init()
 add_action('init', 'concerts_tickets_block_init');
 
 
-/**
- * AJAX handler for processing concert search submissions 
- */
+
 add_action('wp_ajax_tickets_process_submission', 'tickets_process_submission');
+/**
+ * AJAX handler for processing concert search submissions from 'Concerts' block. Validates 
+ * & sanitizes form data, then makes GET call to Setlist.FM API.
+ * @return void no return value; if API call is successful, response body is returned to AJAX call
+ */
 function tickets_process_submission()
 {
-	check_ajax_referer('tickets_process_submission', 'nonce');
+	$errors = array();
+	//returns false if nonce is invalid 
+	if (!check_ajax_referer('tickets_process_submission', 'nonce')) {
+		$errors[] = 'Security check failed.';
+	}
 
 	$artist = isset($_POST['artist']) ? sanitize_text_field($_POST['artist']) : '';
 	$date = isset($_POST['date']) ? sanitize_text_field($_POST['date']) : '';
 	$city = isset($_POST['venue_city']) ? sanitize_text_field($_POST['venue_city']) : '';
-    //used for searching for openers: 
+	//used for searching for openers: 
 	$venue_id = isset($_POST['venue_id']) ? sanitize_text_field($_POST['venue_id']) : '';
-	
-	//TODO: add validation for input fields, if needed
-	$errors = array();
+
+	//artist is always required on inital search, and can be omitted ONLY if venue ID is set (searching for openers)
+	if (empty($artist) && empty($venue_id)) {
+		$errors[] = 'Artist is required to search. Please try again.';
+	}
+	if (empty($date) && empty($city) && empty($venue_id)) {
+		$errors[] = 'Either date or location are required. Please provide at least one, in addition to artist.';
+	}
+
+	//returns any validation errors
 	if (!empty($errors)) {
-		wp_send_json_error(implode(', ', $errors)); //if errors in input, send back to JS 
+		wp_send_json_error(implode(', ', $errors));
 	}
 
 	$searchURL = 'https://api.setlist.fm/rest/1.0/search/setlists?';
-	
-	if (!empty($artist)){
+
+	if (!empty($artist)) {
 		$searchURL .= '&artistName=' . urlencode($artist);
 	}
 	if (!empty($date)) {
@@ -80,15 +94,39 @@ function tickets_process_submission()
 	if (is_wp_error($apiResponse) || $statusCode !== 200) {
 		wp_send_json_error($responseBody);
 	} else {
+
 		$data = json_decode($responseBody);
+
+		if (json_last_error() !== JSON_ERROR_NONE || !isset($data->setlist)) {
+			wp_send_json_error('Could not parse setlist response.');
+		}
+
+		//create a more human-friendly/readable date
+		foreach ($data->setlist as $show) {
+			$date = DateTime::createFromFormat('!d-m-Y', $show->eventDate ?? '');
+
+			if (!$date) {
+				wp_send_json_error('A show has an invalid event date.');
+			}
+
+			$show->pretty_date = $date->format('F j, Y');
+		}
+
 		wp_send_json_success($data); //send back to JS
 
 	}
 
-	wp_die(); //terminates AJAX handler properly
+	wp_die(); //terminates AJAX handler
 }
 
-function renderSetlistContent($data) {
+/**
+ * Generates WP comment-delimited HTML content for a given setlist. 
+ * Used for both headliner and opener setlists.
+ * @param mixed $data JSON representation of a single setlist from Setlist.fm API
+ * @return string content, HTML representation of entire setlist, with WP block comments
+ */
+function renderSetlistContent($data)
+{
 	// Normalize the sets structure. Setlist.fm returns sets => ['set' => [ ... ]]
 	$setlist = array();
 	if (isset($data['sets'])) {
@@ -151,34 +189,36 @@ function renderSetlistContent($data) {
 }
 
 add_action('wp_ajax_create_new_ticket', 'create_new_ticket');
+/**
+ * AJAX handler for 'Tickets form' (popup modal to provide additional details). Validates & sanitizes form
+ * data, which is used to create a 'Ticket' custom post type. 
+ * @return void no return value; on successful ticket creation, ticket ID returned to AJAX call
+ */
 function create_new_ticket()
 {
-	check_ajax_referer('create_new_ticket', 'nonce');
-	//programatically create new ticket using show object 
+	if (!check_ajax_referer('create_new_ticket', 'nonce')) {
+		wp_send_json_error('Security check failed.');
+	}
 
 	$show_data = isset($_POST['show']) ? json_decode(stripslashes($_POST['show']), true) : null;
-
 
 	if (!is_array($show_data)) {
 		wp_send_json_error('Invalid show payload.');
 	}
-	
-	
 
 	$content = '';
-	if(isset($show_data['info']) && !empty($show_data['info'])) {
+	//some setlists include an 'info' note, only render if present
+	if (isset($show_data['info']) && !empty($show_data['info'])) {
 		$info_html = '<p><span class="info">' . esc_html($show_data['info']) . '</span></p>';
 		$content .= get_comment_delimited_block_content('core/paragraph', array(), $info_html);
 	}
 	$content .= renderSetlistContent($show_data);
 
-	
-	//for creating human-readable date
-	$date = date_create($show_data['eventDate']);
-	$pretty_date = date_format($date, 'F j, Y');
+
+
 
 	$meta_input = array(
-		'pretty_date' => $pretty_date,
+		'pretty_date' => sanitize_text_field($show_data['pretty_date']),
 		'date' => sanitize_text_field($show_data['eventDate']),
 		'state' => sanitize_text_field($show_data['venue']['city']['state']),
 		'city' => sanitize_text_field($show_data['venue']['city']['name']),
@@ -222,9 +262,6 @@ function create_new_ticket()
 			}
 		}
 	}
-
-	error_log('Opener names: ' . print_r($opener_names, true));
-	error_log('Opener setlists: ' . print_r($opener_setlists, true));
 	$accordion_items = array();
 	foreach ($opener_setlists as $opener_setlist) {
 		$setlist_content = renderSetlistContent($opener_setlist['setlist']);
@@ -248,8 +285,11 @@ function create_new_ticket()
 		$content .= get_comment_delimited_block_content('core/accordion', array(), $accordion_html);
 	}
 
+	//used to get month & year for taxonomy 
+	$date = date_create($show_data['eventDate']);
+
 	$ticket_data = array(
-		'post_title' => $title = sanitize_text_field($show_data['artist']['name'] . ' - ' . $pretty_date),
+		'post_title' => $title = sanitize_text_field($show_data['artist']['name'] . ' - ' . sanitize_text_field($show_data['pretty_date'])),
 		'post_excerpt' => $show_data['venue']['name'] . ', ' . $show_data['venue']['city']['name'],
 		'post_content' => $content,
 		'post_status' => 'publish',
@@ -259,7 +299,8 @@ function create_new_ticket()
 			'venue' => sanitize_text_field($show_data['venue']['name']),
 			'concert_month' => sanitize_text_field(date_format($date, 'F')),
 			'concert_year' => sanitize_text_field(date_format($date, 'Y')),
-			//'festival' => sanitize_text_field($show_data['eventDate']), //TODO: to be implemented after regular concerts
+			//'festival' => sanitize_text_field($show_data['eventDate']), 
+		    //TODO: to be implemented after regular concerts
 		),
 		'meta_input' => $meta_input,
 	);
@@ -273,6 +314,7 @@ function create_new_ticket()
 		wp_send_json_error('Error creating ticket.');
 	}
 
+	//add openers as metadata; must be added after ticket exists to have multiple values for same meta key
 	if (isset($show_data['openers']) && is_array($show_data['openers'])) {
 		delete_post_meta($ticket_id, 'opener');
 		foreach ($opener_names as $opener_name) {
@@ -300,7 +342,7 @@ function ajax_tickets_enqueue_scripts()
 		$asset['version'],
 		true
 	);
-	
+
 	wp_enqueue_style(
 		'tickets-block-form',
 		plugin_dir_url(__FILE__) . 'build/form/tickets-form-submission.css',

@@ -9,7 +9,8 @@
   "description": "Used to create new 'Tickets' using data from Setlist.fm API. Starts with User input",
   "example": {},
   "supports": {
-    "html": false
+    "html": false,
+    "align": true
   },
   "textdomain": "concert-tickets",
   "editorScript": "file:./index.js",

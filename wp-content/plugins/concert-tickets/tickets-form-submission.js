@@ -10,12 +10,16 @@ if (document.getElementById('concert-form')) {
     const concertForm = document.getElementById('concert-form');
 
 
-
+    //Submit event listener on concert form => modifies date format, then sends data in AJAX call
+    //to perform GET on Setlist.fm API call to search for concerts that match user-submitted data 
     concertForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        const searchResultsDiv = document.getElementById('searchResults');
+
+        const searchResultsDiv = document.getElementById('search-results');
         searchResultsDiv.textContent = ''; //clear any previous search results
+
         var concertFormData = new FormData(concertForm);
+
         if (concertFormData.get('date') != '') {
             //Date comes from form in YYYY-MM-DD format
             let date = (concertFormData.get('date')).split('-');
@@ -23,11 +27,9 @@ if (document.getElementById('concert-form')) {
             let dateString = date[2] + '-' + date[1] + '-' + date[0];
             concertFormData.set('date', dateString);
         }
-
         //appended to facilitate the AJAX call
         concertFormData.append('action', 'tickets_process_submission');
         concertFormData.append('nonce', tickets_ajax_data.form_nonce);
-
 
         jQuery.ajax({
             url: tickets_ajax_data.ajax_url,
@@ -54,12 +56,12 @@ if (document.getElementById('concert-form')) {
                     searchResultsDiv.replaceChildren(heading, results);
 
 
-                } else {
+                } else { //AJAX succeeds but returns error (invalid inputs)
                     searchResultsDiv.textContent = 'Error occurred while processing your request: ' + response.data;
                 }
             },
-            error: function () {
-                searchResultsDiv.textContent = 'Network error occurred while processing your request. Try again';
+            error: function () { //AJAX failure
+                searchResultsDiv.textContent = 'Network error occurred while processing your request. Please try again.';
             },
             complete: function () {
                 // Re-enable the submit button and reset its text
@@ -74,20 +76,67 @@ if (document.getElementById('concert-form')) {
 
 
 
+    /** 
+     * After API returns successfully, iterate through returned shows and render each as 
+     * a div w/details & a button to select that specific show, to create ticket for it 
+     **/
+    function createShowResult(show) {
+        const result = document.createElement('div');
+        result.className = 'show-result';
 
-    //variables for popup modal after user selects a specific show to add seat details 
+        const content = document.createElement('div');
+        const heading = document.createElement('h3');
+         heading.textContent = show.artist.name + ' on ' + show.pretty_date;
+        content.append(heading);
+
+         
+
+        const venue = document.createElement('p');
+        venue.innerHTML = '<strong>Venue</strong>: ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state;
+        content.append(venue);
+
+        if (typeof show.url === 'string' && show.url.startsWith('https://www.setlist.fm/')) {
+            const setlistLink = document.createElement('a');
+            setlistLink.href = show.url;
+            setlistLink.target = '_blank';
+            setlistLink.rel = 'noopener noreferrer';
+            setlistLink.textContent = 'View Setlist on Setlist.fm';
+            content.append(setlistLink);
+        } else {
+            const unavailableLink = document.createElement('span');
+            unavailableLink.textContent = 'Setlist link unavailable';
+            content.append(unavailableLink);
+        }
+
+        result.append(content);
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-primary';
+        button.id = 'select-show-' + show.id;
+        button.textContent = 'Select this show';
+        button.addEventListener('click', function () {
+            selectShow(show);
+        });
+        result.append(button);
+
+       
+
+        return result;
+    }
+
+
+
+    //variables/helper funcs for popup modal after user selects a specific show, to add seat details 
     const modal = document.getElementById('modal');
     const closeBtn = document.getElementById('closeBtn');
-
     function openModal() {
         modal.classList.add("show");
     }
     function closeModal() {
         modal.classList.remove("show");
     }
-
     closeBtn.addEventListener("click", closeModal);
-
     //Close modal when clicking outside the box: 
     modal.addEventListener("click", function (event) {
         if (event.target === modal) {
@@ -100,53 +149,19 @@ if (document.getElementById('concert-form')) {
             closeModal();
         }
     });
-    //After API returns, render each returned show as div w/details & a button to select that show to create ticket
-    function createShowResult(show) {
-        const result = document.createElement('div');
-        result.className = 'show-result';
 
-        const heading = document.createElement('h3');
-        heading.textContent = show.artist.name + ' on ' + show.eventDate;
-        result.append(heading);
 
-        const venue = document.createElement('p');
-        venue.textContent = 'Venue: ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state;
-        result.append(venue);
-
-        if (typeof show.url === 'string' && show.url.startsWith('https://www.setlist.fm/')) {
-            const setlistLink = document.createElement('a');
-            setlistLink.href = show.url;
-            setlistLink.target = '_blank';
-            setlistLink.rel = 'noopener noreferrer';
-            setlistLink.textContent = 'View Setlist on Setlist.fm';
-            result.append(setlistLink);
-        } else {
-            const unavailableLink = document.createElement('span');
-            unavailableLink.textContent = 'Setlist link unavailable';
-            result.append(unavailableLink);
-        }
-
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'btn btn-primary';
-        button.id = 'select-show-' + show.id;
-        button.textContent = 'Select this show';
-        button.addEventListener('click', function () {
-            selectShow(show);
-        });
-        result.append(button);
-
-        return result;
-    }
-
-    //After user selects a show from results, render modal to confirm/add seat details, then create ticket: 
+    /**
+     * After user selects a show from the rendered results, display a popup modal to confirm the show 
+     * selection, add seat details, select if opening acts should be included, then create ticket: 
+     * */
     function selectShow(show) {
-        openModal(); //opens popup modal to add seat details for ticket creation
+        openModal(); //opens popup modal to add final details for ticket creation
 
         const seatData = {};
         const ticketForm = document.getElementById('ticket-form');
         const details = document.getElementById("selectedConcertDetails");
-        details.textContent = 'You are creating a ticket for the ' + show.artist.name + ' concert on ' + show.eventDate + ' at ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '.';
+        details.textContent = 'You are creating a ticket for the ' + show.artist.name + ' concert on ' + show.pretty_date + ' at ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '.';
 
         const genAdmCheckbox = document.getElementById("generalAdmission");
         genAdmCheckbox.addEventListener('change', function () {
@@ -168,14 +183,13 @@ if (document.getElementById('concert-form')) {
             if (this.checked) {
                 //if user wants to include opening acts, reuses same AJAX action to query Setlist.fm API
                 openersContainer.style.display = 'block';
+
                 const openersData = {
                     action: 'tickets_process_submission',
                     nonce: tickets_ajax_data.form_nonce,
                     date: show.eventDate,
                     venue_id: show.venue.id
                 };
-
-                console.log("AJAX data for openers: ", openersData);
 
                 jQuery.ajax({
                     url: tickets_ajax_data.ajax_url,
@@ -205,6 +219,7 @@ if (document.getElementById('concert-form')) {
                                     if (opener.artist.name !== show.artist.name) { // Exclude the headliner
                                         const openerDiv = document.createElement('div');
                                         openerDiv.textContent = 'Opening Act: ' + opener.artist.name;
+                                        //render checkbox to determine if opener's full setlist should also be included
                                         const openerCheckbox = document.createElement('input');
                                         openerCheckbox.type = 'checkbox';
                                         openerCheckbox.name = 'includeOpenerSetlist';
@@ -234,7 +249,7 @@ if (document.getElementById('concert-form')) {
             }
         });
 
-        //event listener for ticket details form submission, creates new ticket
+        //event listener for ticket details form submission => normalizes data & creates new ticket via AJAX
         ticketForm.addEventListener('submit', function (event) {
             event.preventDefault();
 
@@ -254,6 +269,7 @@ if (document.getElementById('concert-form')) {
             show.seat = seatData;
 
             //add opening acts to show data if user selected that option
+            //names of openers are added by default when includeOpeners is checked
             if (ticketFormData.get('includeOpeners')) {
                 const selectedIds = new Set(ticketFormData.getAll('includeOpenerSetlist'));
                 const manualNames = String(ticketFormData.get('manualOpeners') || '')

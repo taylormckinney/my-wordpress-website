@@ -14,7 +14,8 @@ return array(
 			
 		),
 		'supports' => array(
-			'html' => false
+			'html' => false,
+			'align' => true
 		),
 		'textdomain' => 'concert-tickets',
 		'editorScript' => 'file:./index.js',

@@ -17,6 +17,8 @@ $queryParams['post_type'] = 'ticket';
 $filter_taxonomy = sanitize_key($attributes['filterTaxonomy'] ?? '');
 $filter_term_id = absint($attributes['filterTermId'] ?? 0);
 
+
+
 ?>
 <div <?php echo get_block_wrapper_attributes(); ?>
 	style="background-color: <?php echo $attributes['backgroundColor'] ?>">
@@ -66,6 +68,11 @@ $filter_term_id = absint($attributes['filterTermId'] ?? 0);
 	if ($query->have_posts()) {
 		while ($query->have_posts()) {
 			$query->the_post();
+			$tour_name = get_post_meta(get_the_ID(), 'tour_name', true);
+			$opener_names = get_post_meta(get_the_ID(), 'opener', false);
+			$opener_names = array_filter($opener_names, function ($opener_name) {
+				return is_string($opener_name) && trim($opener_name) !== '';
+			});
 			?>
 			<div class="ticket" id="<?php echo the_ID(); ?>">
 				<div class="ticket__details">
@@ -80,8 +87,12 @@ $filter_term_id = absint($attributes['filterTermId'] ?? 0);
 						<li>Location: <?php echo get_post_meta(get_the_ID(), 'city', true); ?>,
 							<?php echo get_post_meta(get_the_ID(), 'state', true); ?>
 						</li>
-						<li>Tour: <?php echo get_post_meta(get_the_ID(), 'tour_name', true); ?></li>
-						<li>Opening Acts: <?php echo implode(", ", get_post_meta(get_the_ID(), 'opener', false)); ?></li>
+						<?php if (is_string($tour_name) && trim($tour_name) !== '') { ?>
+							<li>Tour: <?php echo esc_html($tour_name); ?></li>
+						<?php }
+						if (!empty($opener_names)) { ?>
+							<li>Opening Acts: <?php echo esc_html(implode(', ', $opener_names)); ?></li>
+						<?php } ?>
 					</ul>
 				</div>
 				<div class="ticket__rip"></div>

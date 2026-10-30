@@ -32,22 +32,24 @@ export default function Edit() {
 
 	return (
 		<div {...useBlockProps()}>
-			<h2>Add new Concert:</h2>
+
 			<form id="concert-form" name="concert-form" method="post" action="tickets_process_submission">
-				<label for="artist">Artist:</label>
-				<input type="text" id="artist" name="artist" required></input>
+				<fieldset>
+					<legend>Search for a Concert to add:</legend>
+					<label for="artist">Artist:</label>
+					<input type="text" id="artist" name="artist" required></input>
 
-				<label for="date">Date:</label>
-				<input type="date" id="date" name="date"></input>
+					<label for="date">Date:</label>
+					<input type="date" id="date" name="date"></input>
 
-				<label for="venue_city">Venue Location:</label>
-				<input type="text" id="venue_city" name="venue_city"></input>
+					<label for="venue_city">Venue Location:</label>
+					<input type="text" id="venue_city" name="venue_city"></input>
 
-				<input type="submit" id="concert-submit" name="concert-submit" value="Search for Setlists"></input>
-
+					<input type="submit" id="concert-submit" name="concert-submit" value="Search for Setlists"></input>
+				</fieldset>
 			</form>
 
-			<div id="searchResults"></div>
+			<div id="search-results"></div>
 
 			<div id="modal" class="modal-overlay">
 				<div class="modal-box">
