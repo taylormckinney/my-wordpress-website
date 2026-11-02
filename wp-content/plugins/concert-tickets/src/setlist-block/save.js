@@ -36,7 +36,7 @@ export default function save() {
 				</fieldset>
 			</form>
 
-			<div id="search-results"></div>
+			<div id="search-results"><p><i>Search results will appear here once form is submitted.</i></p></div>
 
 			<div id="modal" class="modal-overlay">
 				<div class="modal-box">
@@ -44,20 +44,18 @@ export default function save() {
 					<h2>Create or Update Ticket: </h2>
 					<p id="selectedConcertDetails"></p>
 					<form id="ticket-form" name="ticket-form" method="post">
-						<label for="includeOpeners">Include Opening Acts:</label>
 						<input type="checkbox" id="includeOpeners" name="includeOpeners"></input>
+						<label for="includeOpeners">Include Opening Acts</label>
 						<div id="openersContainer"></div>
-						<label for="generalAdmission">General Admission Show</label>
 						<input type="checkbox" id="generalAdmission" name="generalAdmission"></input>
+						<label for="generalAdmission">General Admission Show</label>
 						<fieldset id="seatDetails">
 							<legend>Seat Details</legend>
 							<label for="section">Section: </label>
 							<input type="text" id="section" name="section"></input>
-							<br />
 							<label for="row">Row: </label>
 							<input type="text" id="row" name="row"></input>
-							<br />
-							<label for="seatNumber">Seat Number:</label>
+							<label for="seatNumber">Seat Number:</label><br />
 							<input type="number" id="seatNumber" name="seatNumber" min="0" step="1"></input>
 						</fieldset>
 						<input type="submit" id="ticket-submit" name="ticket-submit" value="Create or Update Ticket"></input>

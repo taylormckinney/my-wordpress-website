@@ -30,3 +30,35 @@ Stack trace:
 [30-Oct-2026 21:21:51 UTC] PHP Warning:  Trying to access array offset on false in C:\Users\taylo\Studio\my-wordpress-website\wp-includes\meta.php on line 783
 [30-Oct-2026 21:22:55 UTC] PHP Warning:  Trying to access array offset on false in C:\Users\taylo\Studio\my-wordpress-website\wp-includes\meta.php on line 783
 [30-Oct-2026 21:22:55 UTC] PHP Warning:  Trying to access array offset on false in C:\Users\taylo\Studio\my-wordpress-website\wp-includes\meta.php on line 783
+[01-Nov-2026 01:23:25 UTC] Automatic updates starting...
+[01-Nov-2026 01:23:26 UTC]   Automatic plugin updates starting...
+[01-Nov-2026 01:23:26 UTC]   Automatic plugin updates complete.
+[01-Nov-2026 01:23:27 UTC] Automatic updates complete.
+[02-Nov-2026 18:47:11 UTC] Automatic updates starting...
+[02-Nov-2026 18:47:11 UTC]   Automatic plugin updates starting...
+[02-Nov-2026 18:47:12 UTC]   Automatic plugin updates complete.
+[02-Nov-2026 18:47:12 UTC] Automatic updates complete.
+[02-Nov-2026 19:30:37 UTC] PHP Warning:  require(C:\Users\taylo\Studio\my-wordpress-website\wp-content\plugins\concert-tickets/build/form/tickets-form-submission.asset.php): Failed to open stream: No such file or directory in C:\Users\taylo\Studio\my-wordpress-website\wp-content\plugins\concert-tickets\concert-tickets.php on line 335
+[02-Nov-2026 19:30:37 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\Users\taylo\Studio\my-wordpress-website\wp-content\plugins\concert-tickets/build/form/tickets-form-submission.asset.php' (include_path='.;C:\php\pear') in C:\Users\taylo\Studio\my-wordpress-website\wp-content\plugins\concert-tickets\concert-tickets.php:335
+Stack trace:
+#0 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\class-wp-hook.php(341): ajax_tickets_enqueue_scripts('')
+#1 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#2 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#3 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\script-loader.php(2329): do_action('wp_enqueue_scri...')
+#4 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\class-wp-hook.php(341): wp_enqueue_scripts('')
+#5 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters(NULL, Array)
+#6 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#7 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\general-template.php(3208): do_action('wp_head')
+#8 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\template-canvas.php(17): wp_head()
+#9 C:\Users\taylo\Studio\my-wordpress-website\wp-includes\template-loader.php(132): include('C:\\Users\\taylo\\...')
+#10 C:\Users\taylo\Studio\my-wordpress-website\wp-blog-header.php(19): require_once('C:\\Users\\taylo\\...')
+#11 C:\Users\taylo\Studio\my-wordpress-website\index.php(17): require('C:\\Users\\taylo\\...')
+#12 C:\Users\taylo\AppData\Local\studio_app\app-1.23.0\resources\cli\php\router.php(140): require('C:\\Users\\taylo\\...')
+#13 {main}
+  thrown in C:\Users\taylo\Studio\my-wordpress-website\wp-content\plugins\concert-tickets\concert-tickets.php on line 335
+[02-Nov-2026 19:41:22 UTC] Automatic updates starting...
+[02-Nov-2026 19:41:22 UTC]   Automatic plugin updates starting...
+[02-Nov-2026 19:41:22 UTC]   Automatic plugin updates complete.
+[02-Nov-2026 19:41:22 UTC] Automatic updates complete.
+[02-Nov-2026 22:08:52 UTC] PHP Notice:  Function WP_Block_Metadata_Registry::register_collection was called <strong>incorrectly</strong>. The specified manifest file does not exist. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in C:\Users\taylo\Studio\my-wordpress-website\wp-includes\functions.php on line 6170
+[02-Nov-2026 22:08:52 UTC] PHP Notice:  Function WP_Block_Metadata_Registry::get_collection_block_metadata_files was called <strong>incorrectly</strong>. No registered block metadata collection was found for the provided path. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.8.0.) in C:\Users\taylo\Studio\my-wordpress-website\wp-includes\functions.php on line 6170

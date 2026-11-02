@@ -34,6 +34,7 @@ add_action('init', 'concerts_tickets_block_init');
 
 
 add_action('wp_ajax_tickets_process_submission', 'tickets_process_submission');
+add_action('wp_ajax_nopriv_tickets_process_submission', 'tickets_process_submission'); //allows non-logged-in users to search for setlists
 /**
  * AJAX handler for processing concert search submissions from 'Concerts' block. Validates 
  * & sanitizes form data, then makes GET call to Setlist.FM API.
@@ -90,12 +91,24 @@ function tickets_process_submission()
 
 	$statusCode = wp_remote_retrieve_response_code($apiResponse);
 	$responseBody = wp_remote_retrieve_body($apiResponse);
+	$data = json_decode($responseBody);
 
-	if (is_wp_error($apiResponse) || $statusCode !== 200) {
-		wp_send_json_error($responseBody);
+	if (is_wp_error($apiResponse)) {
+		wp_send_json_error($apiResponse->get_error_message());
+	}
+
+	if ($statusCode !== 200) {
+		$error_status = (
+			json_last_error() === JSON_ERROR_NONE
+			&& isset($data->status)
+			&& is_string($data->status)
+		)
+			? sanitize_text_field($data->status)
+			: sprintf('Setlist.fm request failed (HTTP %d).', $statusCode);
+
+		wp_send_json_error($error_status);
 	} else {
 
-		$data = json_decode($responseBody);
 
 		if (json_last_error() !== JSON_ERROR_NONE || !isset($data->setlist)) {
 			wp_send_json_error('Could not parse setlist response.');
@@ -188,7 +201,8 @@ function renderSetlistContent($data)
 	return $content;
 }
 
-add_action('wp_ajax_create_new_ticket', 'create_new_ticket');
+add_action('wp_ajax_create_new_ticket', 'create_new_ticket'); //only logged-in users can create new ticket
+//add_action('wp_ajax_nopriv_create_new_ticket', 'create_new_ticket_demo'); //generates a sample ticket for demo
 /**
  * AJAX handler for 'Tickets form' (popup modal to provide additional details). Validates & sanitizes form
  * data, which is used to create a 'Ticket' custom post type. 
@@ -198,6 +212,10 @@ function create_new_ticket()
 {
 	if (!check_ajax_referer('create_new_ticket', 'nonce')) {
 		wp_send_json_error('Security check failed.');
+	}
+
+	if (!current_user_can('edit_posts')) {
+		wp_send_json_error('Current user does not have permission to create a new ticket.');
 	}
 
 	$show_data = isset($_POST['show']) ? json_decode(stripslashes($_POST['show']), true) : null;
@@ -224,7 +242,7 @@ function create_new_ticket()
 		'city' => sanitize_text_field($show_data['venue']['city']['name']),
 		'tour_name' => sanitize_text_field($show_data['tour']['name'] ?? ''),
 	);
-	//only add/update seat info if value is provided in show data & existing ticket does not already have seat info
+	//only add/update seat info if value is provided in show data (avoids re-writing on update)
 	$seat_data = isset($show_data['seat']) && is_array($show_data['seat']) ? $show_data['seat'] : array();
 	foreach (array(
 		'section' => 'seat_section',
@@ -300,7 +318,7 @@ function create_new_ticket()
 			'concert_month' => sanitize_text_field(date_format($date, 'F')),
 			'concert_year' => sanitize_text_field(date_format($date, 'Y')),
 			//'festival' => sanitize_text_field($show_data['eventDate']), 
-		    //TODO: to be implemented after regular concerts
+			//TODO: to be implemented after regular concerts
 		),
 		'meta_input' => $meta_input,
 	);
@@ -326,6 +344,8 @@ function create_new_ticket()
 
 	wp_die();
 }
+
+
 
 add_action('wp_enqueue_scripts', 'ajax_tickets_enqueue_scripts');
 function ajax_tickets_enqueue_scripts()

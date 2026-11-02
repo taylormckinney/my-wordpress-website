@@ -9,20 +9,23 @@
 	padding: 2px;
 }
 
-/** 
-* CSS for Concert Tickets display, heavily inspired by/using below code example as a base: 
+/**
+* CSS for Concert Tickets display, heavily inspired by/using below code example as a base:
 * https://codepen.io/ahmedbeheiry/pen/rNBQOLE
 */
-$price_bg: #AB2346;
+$price_bg: #ab2346;
 $rip_cut_size: 20px;
 $rip_border_size: calc($rip_cut_size / 4);
+
 .ticket {
 	position: relative;
 	display: flex;
 	flex-direction: row;
 	width: min(800px, 100%);
-	margin: 50px auto;
+	box-sizing: border-box;
+	margin: 20px auto;
 	filter: drop-shadow(2px 5px 5px rgba(0, 0, 0, 0.15));
+
 
 	&__details {
 		flex: 3 1 0;
@@ -30,11 +33,11 @@ $rip_border_size: calc($rip_cut_size / 4);
 		min-height: 150px;
 		padding: 1rem;
 		border-radius: 5px 0 0 5px;
-		
+
 		.ticket__title {
 			margin-top: 0;
-			color: #042A2B;
-			text-shadow: 1px 1px 2px #70A9A1;
+			color: #042a2b;
+			text-shadow: 1px 1px 2px #70a9a1;
 			text-align: center;
 			a {
 				text-decoration: none; //remove underline from link
@@ -53,7 +56,7 @@ $rip_border_size: calc($rip_cut_size / 4);
 
 		h4 {
 			text-align: center;
-			color: #63264A;
+			color: #63264a;
 		}
 	}
 
@@ -62,7 +65,7 @@ $rip_border_size: calc($rip_cut_size / 4);
 		background-color: #fff;
 		background-image: linear-gradient(90deg, #fff 49%, $price_bg 50%);
 		margin: calc($rip_cut_size / 2) 0;
-		width: $rip_cut_size;
+		flex: 0 0 $rip_cut_size;
 
 		&::before,
 		&::after {
@@ -107,16 +110,45 @@ $rip_border_size: calc($rip_cut_size / 4);
 			font-size: 1rem;
 			margin-bottom: .6rem;
 			color: #ffcdde;
-			margin-left: -5px;
-			
 		}
 		
 		.seatInfo {
 			font-size: 2rem;
 			font-weight: bold;
-			margin-left: -5px;
 			text-transform: uppercase;
 			text-align: center;
 		}
+	}
+}
+
+@media (max-width: 600px) {
+
+	.ticket {
+		width: calc(100% - 1rem);
+		margin: 1rem auto;
+
+		&__details {
+			min-width: 0;
+			padding: 0.75rem;
+		}
+
+		&__rip {
+			align-self: stretch;
+		}
+
+		&__seats {
+			min-width: 0;
+			padding: 0.75rem 0.4rem;
+
+			.heading {
+				text-align: center;
+				font-size: 0.9rem;
+			}
+
+			.seatInfo {
+				font-size: clamp(1rem, 5vw, 1.5rem);
+			}
+		}
+
 	}
 }

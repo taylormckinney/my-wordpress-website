@@ -1,31 +1,48 @@
-
-
 .wp-block-concert-tickets-setlist-block {
-	background-color: #042A2B;
-	color: #fff;
-	padding: 10px;
-  display: flex; 
+  background-color: #042A2B;
+  color: #fff;
+  padding: 10px;
+  display: flex;
   flex-flow: row nowrap;
+  @media only screen and (max-width: 600px) and (orientation: portrait) { //phone screens
+    flex-flow: column nowrap;
+  }
 }
 
-input {
+input[type="text"], input[type="date"] {
   display: block;
+}
+
+#concert-form {
+  background-color: #70A9A1;
+  flex: 0 0 auto;
+  padding: 5px;
+  margin: 5px;
+}
+
+#search-results {
+  background-color: #042A2B;
+  flex: 1 1 auto;
+  max-height: 200px;
+  overflow-y: auto;
+
 }
 
 .show-result {
   background-color: #70A9A1;
   color: #000;
   margin: 20px;
-  padding: 5px;
-   display:flex; //nested flex for show-result divs
-  
+  padding: 10px;
+  display: flex; //nested flex for show-result divs
   justify-content: space-between;
   align-items: center;
+
   a {
     color: #fff;
-    font-style: italic; 
+    font-style: italic;
     font-size: 10px;
   }
+
   button {
     width: 100px;
     height: 100px;
@@ -34,19 +51,7 @@ input {
   }
 }
 
-#concert-form {
-  background-color:#70A9A1;
-  flex: 0 0 auto;
-  padding: 5px;
-  margin: 5px;
-}
-#search-results {
-  background-color: #042A2B;
-  flex: 1 1 auto;
-  max-height: 200px;
-  overflow-y: auto;
- 
-}
+
 
 /**
 * Below styling originated from W3Schools: https://www.w3schools.com/JS/js_project_modal_popup.asp

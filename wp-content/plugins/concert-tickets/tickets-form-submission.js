@@ -47,8 +47,8 @@ if (document.getElementById('concert-form')) {
             success: function (response) {
                 if (response.success) { //verifies API call was successful, not just AJAX call
                     const shows = response.data.setlist;
-                    const heading = document.createElement('h2');
-                    heading.textContent = 'Select the show you would like to create a ticket for:';
+                    const heading = document.createElement('p');
+                    heading.textContent = 'Select a show to create a ticket:';
                     const results = document.createDocumentFragment();
                     shows.forEach(function (show) {
                         results.append(createShowResult(show));
@@ -57,7 +57,9 @@ if (document.getElementById('concert-form')) {
 
 
                 } else { //AJAX succeeds but returns error (invalid inputs)
-                    searchResultsDiv.textContent = 'Error occurred while processing your request: ' + response.data;
+
+                    searchResultsDiv.innerHTML = '<i>Error occurred while processing your request: </i>' + response.data + '<br> Please try searching again with different criteria.';
+
                 }
             },
             error: function () { //AJAX failure
@@ -86,10 +88,10 @@ if (document.getElementById('concert-form')) {
 
         const content = document.createElement('div');
         const heading = document.createElement('h3');
-         heading.textContent = show.artist.name + ' on ' + show.pretty_date;
+        heading.textContent = show.artist.name + ' on ' + show.pretty_date;
         content.append(heading);
 
-         
+
 
         const venue = document.createElement('p');
         venue.innerHTML = '<strong>Venue</strong>: ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state;
@@ -120,7 +122,7 @@ if (document.getElementById('concert-form')) {
         });
         result.append(button);
 
-       
+
 
         return result;
     }
@@ -161,7 +163,7 @@ if (document.getElementById('concert-form')) {
         const seatData = {};
         const ticketForm = document.getElementById('ticket-form');
         const details = document.getElementById("selectedConcertDetails");
-        details.textContent = 'You are creating a ticket for the ' + show.artist.name + ' concert on ' + show.pretty_date + ' at ' + show.venue.name + ' in ' + show.venue.city.name + ', ' + show.venue.city.state + '.';
+        details.innerHTML = 'You are creating a ticket for the <strong>' + show.artist.name + '</strong> concert on <strong>' + show.pretty_date + '</strong> at <strong>' + show.venue.name + '</strong> in <strong>' + show.venue.city.name + ', ' + show.venue.city.state + '</strong>.';
 
         const genAdmCheckbox = document.getElementById("generalAdmission");
         genAdmCheckbox.addEventListener('change', function () {
@@ -183,6 +185,7 @@ if (document.getElementById('concert-form')) {
             if (this.checked) {
                 //if user wants to include opening acts, reuses same AJAX action to query Setlist.fm API
                 openersContainer.style.display = 'block';
+                openersContainer.innerHTML = ''; //clear previous opening acts if any
 
                 const openersData = {
                     action: 'tickets_process_submission',
@@ -190,6 +193,16 @@ if (document.getElementById('concert-form')) {
                     date: show.eventDate,
                     venue_id: show.venue.id
                 };
+
+                //used for rendering manual entry of opening acts if no opening 
+                // acts are found from the API, or if there is a failure on AJAX call
+                const noOpenersMsg = document.createElement('p');
+                const manualOpenersInput = document.createElement('input');
+                manualOpenersInput.type = 'text';
+                manualOpenersInput.style.width = '70%';
+                manualOpenersInput.id = 'manualOpeners';
+                manualOpenersInput.name = 'manualOpeners';
+                manualOpenersInput.placeholder = 'Enter opening acts separated by commas';
 
                 jQuery.ajax({
                     url: tickets_ajax_data.ajax_url,
@@ -199,33 +212,30 @@ if (document.getElementById('concert-form')) {
                     success: function (response) {
                         if (response.success) {
                             const openers = response.data.setlist;
-                            
+
                             if (openers.length === 1 && openers[0].artist.name === show.artist.name) {
-                                const noOpenersMsg = document.createElement('p');
+
                                 noOpenersMsg.textContent = 'No opening acts found for this show. Optionally, you can manually add opening acts below.';
                                 openersContainer.appendChild(noOpenersMsg);
 
-                                const manualOpenersInput = document.createElement('input');
-                                manualOpenersInput.type = 'text';
-                                manualOpenersInput.style.width = '70%';
-                                manualOpenersInput.id = 'manualOpeners';
-                                manualOpenersInput.name = 'manualOpeners';
-                                manualOpenersInput.placeholder = 'Enter opening acts separated by commas';
                                 openersContainer.appendChild(manualOpenersInput);
                             }
                             else {
                                 openers.forEach(function (opener) {
                                     // Process each opener
                                     if (opener.artist.name !== show.artist.name) { // Exclude the headliner
-                                        const openerDiv = document.createElement('div');
-                                        openerDiv.textContent = 'Opening Act: ' + opener.artist.name;
                                         //render checkbox to determine if opener's full setlist should also be included
                                         const openerCheckbox = document.createElement('input');
                                         openerCheckbox.type = 'checkbox';
                                         openerCheckbox.name = 'includeOpenerSetlist';
                                         openerCheckbox.value = opener.artist.mbid;
-                                        openerDiv.appendChild(openerCheckbox);
-                                        openersContainer.appendChild(openerDiv);
+                                        openerCheckbox.style.marginLeft = '20px';
+                                        const openerLabel = document.createElement('label');
+                                        openerLabel.textContent = 'Include full setlist for ' + opener.artist.name;
+                                        openerCheckbox.id = 'includeOpenerSetlist_' + opener.artist.mbid;
+                                        openerLabel.style.marginLeft = '5px';
+                                        openerLabel.setAttribute('for', openerCheckbox.id);
+                                        openersContainer.append(openerCheckbox, openerLabel, document.createElement('br'));
 
                                         var openerObj = {
                                             name: opener.artist.name,
@@ -240,7 +250,14 @@ if (document.getElementById('concert-form')) {
                             }
                         }
 
+                    },
+                    error: function (response) {
+                        console.error('Failed to fetch openers:', response);
+                        noOpenersMsg.textContent = 'Failed to fetch opening acts. Optionally, you can manually add opening acts below.';
+                        openersContainer.appendChild(noOpenersMsg);
+                        openersContainer.appendChild(manualOpenersInput);
                     }
+
                 });
 
             }
@@ -339,5 +356,4 @@ if (document.getElementById('concert-form')) {
     }
 
 }
-
 
