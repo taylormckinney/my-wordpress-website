@@ -140,17 +140,6 @@ function register_tickets_meta() {
         ));
         register_meta(
         'post',
-        'openers',
-        array(
-            'label' => 'Opening Acts',
-            'type' => 'string',
-            'default' => '',
-            'single' => false,
-            'show_in_rest' => true,
-            'object_subtype' => 'ticket'
-        ));
-        register_meta(
-        'post',
         'opener',
         array(
             'label' => 'Opening Act',

@@ -4,12 +4,15 @@
   padding: 10px;
   display: flex;
   flex-flow: row nowrap;
-  @media only screen and (max-width: 600px) and (orientation: portrait) { //phone screens
+  align-items: center;
+  @media only screen and (max-width: 600px) and (orientation: portrait) {
+    //phone screens
     flex-flow: column nowrap;
   }
 }
 
-input[type="text"], input[type="date"] {
+input[type="text"],
+input[type="date"] {
   display: block;
 }
 
@@ -23,9 +26,20 @@ input[type="text"], input[type="date"] {
 #search-results {
   background-color: #042A2B;
   flex: 1 1 auto;
-  max-height: 200px;
+  padding: 5px;
+  margin: 5px;
+  height: var(--concert-form-height, auto); //adjusts height to match concert form
+  box-sizing: border-box;
   overflow-y: auto;
-
+  scrollbar-width: thin;
+  scrollbar-color: #70A9A1 #042A2B;
+  p {
+    margin-block: 0; //removes default browser margins
+  }
+  @media only screen and (max-width: 600px) and (orientation: portrait) {
+    height: auto;
+    max-height: 50vh;
+  }
 }
 
 .show-result {

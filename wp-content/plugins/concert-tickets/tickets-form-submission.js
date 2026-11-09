@@ -8,14 +8,23 @@ import 'toastify-js/src/toastify.css';
 if (document.getElementById('concert-form')) {
 
     const concertForm = document.getElementById('concert-form');
-
+    const searchResultsDiv = document.getElementById('search-results');
+    //helps keep concert form & search results the same height while allowing for responsive resizing: 
+    const syncResultsHeight = () => {
+        searchResultsDiv.style.setProperty(
+            '--concert-form-height',
+            `${concertForm.getBoundingClientRect().height}px`
+        )
+    };
+    const formResizeObserver = new ResizeObserver(syncResultsHeight);
+    formResizeObserver.observe(concertForm);
+    syncResultsHeight();
 
     //Submit event listener on concert form => modifies date format, then sends data in AJAX call
     //to perform GET on Setlist.fm API call to search for concerts that match user-submitted data 
     concertForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const searchResultsDiv = document.getElementById('search-results');
         searchResultsDiv.textContent = ''; //clear any previous search results
 
         var concertFormData = new FormData(concertForm);
