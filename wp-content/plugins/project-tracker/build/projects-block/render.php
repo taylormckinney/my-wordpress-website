@@ -11,5 +11,5 @@
  */
 ?>
 <p <?php echo get_block_wrapper_attributes(); ?>>
-	<?php esc_html_e( 'Projects Block – hello from a dynamic block!', 'projects-block' ); ?>
+	<?php esc_html_e( 'Projects Block – hello from a dynamic block!', 'project-tracker' ); ?>
 </p>

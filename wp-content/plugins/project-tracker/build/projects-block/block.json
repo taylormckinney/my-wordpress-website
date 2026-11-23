@@ -1,17 +1,17 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "create-block/projects-block",
+  "name": "project-tracker/projects-block",
   "version": "0.1.0",
   "title": "Projects Block",
   "category": "widgets",
-  "icon": "smiley",
-  "description": "Example block scaffolded with Create Block tool.",
+  "icon": "hammer",
+  "description": "Projects Block for tracking and displaying projects.",
   "example": {},
   "supports": {
     "html": false
   },
-  "textdomain": "projects-block",
+  "textdomain": "project-tracker",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
